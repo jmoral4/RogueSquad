@@ -1,11 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
 using RogueSquad.Core;
 using GeonBit.UI;
 using GeonBit.UI.Entities;
 using QuakeConsole;
+using System;
+using MonoGame.Extended;
 
 namespace RogueSquad.Client.Dx
 {
@@ -17,9 +18,8 @@ namespace RogueSquad.Client.Dx
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         ConsoleComponent _console;
-   
-
-        
+        World world;
+        FramesPerSecondCounter fps;
 
         public Game1()
         {
@@ -32,6 +32,9 @@ namespace RogueSquad.Client.Dx
             graphics.SynchronizeWithVerticalRetrace = false;
             _console = new ConsoleComponent(this);
             Components.Add(_console);
+            graphics.PreferredBackBufferWidth = 1920;
+            graphics.PreferredBackBufferHeight = 1080;
+            fps = new FramesPerSecondCounter();
         }
 
         /// <summary>
@@ -45,6 +48,10 @@ namespace RogueSquad.Client.Dx
             // TODO: Add your initialization logic here
             // GeonBit.UI: Init the UI manager using the "hd" built-in theme
             UserInterface.Initialize(Content, BuiltinThemes.hd);
+            Engine.Instance.Init(this.graphics, this.Content);
+
+
+            //player.AddComponent(new BasicControllerComponent());
             base.Initialize();
         }
 
@@ -62,15 +69,41 @@ namespace RogueSquad.Client.Dx
             UserInterface.Active.AddEntity(panel);
 
             // add title and text
-            panel.AddChild(new Header("Example Panel"));
+            panel.AddChild(new Header("Rogue Squad AI Test"));
             panel.AddChild(new HorizontalLine());
-            panel.AddChild(new Paragraph("This is a simple panel with a button."));
+            panel.AddChild(new Paragraph("Simple AI Test"));
 
+            var btn = new Button("Close", ButtonSkin.Default, Anchor.BottomCenter);
+            btn.OnClick += (e) => { Console.WriteLine("clicked"); Entity en = e; en.Parent.Visible = false; };
+            
             // add a button at the bottom
-            panel.AddChild(new Button("Click Me!", ButtonSkin.Default, Anchor.BottomCenter));
+            panel.AddChild(btn);
 
-            // TODO: use this.Content to load your game content here
+            world = new World();
+            world.RegisterSystem(new BasicControllingSystem());
+            world.RegisterRenderSystem(new Render2DSystem(spriteBatch));
+
+            RogueEntity player = world.CreateEntity();
+            player.AddComponent(new PositionComponent { Position = new Vector2(100, 100) });
+            player.AddComponent(new RenderableComponent { Texture = Content.Load<Texture2D>("Textures/ro") });
+            player.AddComponent(new BasicControllerComponent());
+
+            CreateRandomNPCS();
         }
+
+        private void CreateRandomNPCS()
+        {
+            Random r = new Random();
+            for (int i = 0; i < 1000; i++)
+            {
+                RogueEntity player = world.CreateEntity();
+                player.AddComponent(new PositionComponent { Position = new Vector2(r.Next(0,1920-20), r.Next(0,1080-20)) });
+                player.AddComponent(new RenderableComponent { Texture = Content.Load<Texture2D>("Textures/ro") });
+                player.AddComponent(new BasicControllerComponent());
+            }
+
+        }
+
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -95,7 +128,8 @@ namespace RogueSquad.Client.Dx
             #if !__IOS__ && !__TVOS__
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            #endif
+            #endif            
+
             // GeonBit.UIL update UI manager
             UserInterface.Active.Update(gameTime);
             // TODO: Add your update logic here
@@ -104,7 +138,13 @@ namespace RogueSquad.Client.Dx
             if (previousKeyboardState.IsKeyUp(Keys.OemTilde) && currentKeyboardState.IsKeyDown(Keys.OemTilde))
                 _console.ToggleOpenClose();
 
+            if (previousKeyboardState.IsKeyUp(Keys.Space) && currentKeyboardState.IsKeyDown(Keys.Space))
+                CreateRandomNPCS();
+
+                world.Update(gameTime);
+
             previousKeyboardState = currentKeyboardState;
+            fps.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -114,10 +154,15 @@ namespace RogueSquad.Client.Dx
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            this.Window.Title = "Fps:" + fps.FramesPerSecond + " Entities: " + world.EntityCount;
+            fps.Draw(gameTime);
             GraphicsDevice.Clear(Color.CornflowerBlue);
             // GeonBit.UI: draw UI using the spriteBatch you created above
             UserInterface.Active.Draw(spriteBatch);
             // TODO: Add your drawing code here
+            world.Draw(gameTime);
+            
+            
 
             base.Draw(gameTime);
         }

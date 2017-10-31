@@ -655,6 +655,7 @@
     <Content Include="Content\GeonBit.UI\themes\lowres\textures\slider_fancy_md.xml" />
     <Content Include="Content\GeonBit.UI\themes\lowres\textures\white_texture.png" />
     <Content Include="Content\GeonBit.UI\themes\lowres\ThemeData.xml" />
+    <Content Include="Content\Textures\ro.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -676,6 +677,10 @@
     <Folder Include="Tools\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Extended\Source\MonoGame.Extended\MonoGame.Extended.csproj">
+      <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
+      <Name>MonoGame.Extended</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RogueSquad.Core\RogueSquad.Core.csproj">
       <Project>{668ffb7f-8de2-4704-989d-443b1d77e20a}</Project>
       <Name>RogueSquad.Core</Name>

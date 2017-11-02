@@ -113,7 +113,16 @@ namespace RogueSquad.Core
 
                 if (hasTypes.All(x => true))
                     sys.AddEntity(entity);
+
+                //if it has renderable parts, add to renderables                
             }
+
+            if (entity.HasComponent(ComponentTypes.Render) && entity.HasComponent(ComponentTypes.Position))
+            {
+                foreach (var renderSys in RenderSystems)
+                    renderSys.AddEntity(entity);
+            }
+
             // add to world tracking as well
             Entities.Add(entity);
         }
@@ -136,7 +145,7 @@ namespace RogueSquad.Core
         {
             foreach (var renderSystem in RenderSystems)
             {
-                renderSystem.Draw(gameTime, Entities);
+                renderSystem.Draw(gameTime);
             }
         }
 
@@ -152,14 +161,14 @@ namespace RogueSquad.Core
     {
         void Update(GameTime gametime);
         void AddEntity(RogueEntity entity);
-
         ComponentTypes[] DesiredComponentsTypes { get; set; }
     }
 
     public interface IRogueRenderSystem
     {
-        void Draw(GameTime gameTime, IList<RogueEntity> entities);
-        
+        void Draw(GameTime gameTime);
+        void AddEntity(RogueEntity entity);
+
     }
 
     public interface IRogueComponent
@@ -167,33 +176,37 @@ namespace RogueSquad.Core
         ComponentTypes ComponentType { get; set; }
     }
 
+    public class RenderNode
+    {
+        public int Id { get; set; }
+        public RenderableComponent Renderalble { get; set; }
+        public PositionComponent Position { get; set; }
+    }
+
     public class Render2DSystem : IRogueRenderSystem
     {
         SpriteBatch batchRef;
+        public IList<RenderNode> _renderNodes = new List<RenderNode>();
         public Render2DSystem(SpriteBatch batch)
         {
             batchRef = batch;
         }
 
-        public void Draw(GameTime gameTime, IList<RogueEntity> entities)
+        public void AddEntity(RogueEntity entity)
         {
-            batchRef.Begin();
-            foreach (var entity in entities)
-            {
-                if (entity.HasComponent(ComponentTypes.Render))
-                {
-                    //get position
-                    var position = entity.GetComponentsByType(ComponentTypes.Position).First() as PositionComponent;
-                    var render = entity.GetComponentsByType(ComponentTypes.Render).First() as RenderableComponent;
-                    batchRef.Draw(render.Texture, position.Position, Color.White);                    
-                }
-            }
-            batchRef.End();
+            var render = entity.GetComponentByType(ComponentTypes.Render) as RenderableComponent;
+            var position = entity.GetComponentByType(ComponentTypes.Position) as PositionComponent;
+            _renderNodes.Add(new RenderNode { Position = position, Renderalble =  render, Id = entity.ID });
         }
 
-        public bool Equals(Render2DSystem other)
+        public void Draw(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            batchRef.Begin();
+            foreach (var entity in _renderNodes)
+            {
+                batchRef.Draw(entity.Renderalble.Texture, entity.Position.Position, Color.White);                
+            }
+            batchRef.End();
         }
     }
 
@@ -227,8 +240,7 @@ namespace RogueSquad.Core
                 controlNode.Controller.ProcessInput(kb);
                 if (controlNode.Controller.AnyKeyPressed)
                 {
-                    Vector2 newPos = controlNode.Position.Position;
-                    
+                    Vector2 newPos = controlNode.Position.Position;                    
 
                     if (controlNode.Controller.KeyRetreat)
                     {

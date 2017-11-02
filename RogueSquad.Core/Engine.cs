@@ -14,6 +14,7 @@ namespace RogueSquad.Core
     //http://csharpindepth.com/Articles/General/Singleton.aspx
     public sealed class Engine
     {
+
         private static readonly Lazy<Engine> lazy =
             new Lazy<Engine>(() => new Engine());
 
@@ -29,23 +30,57 @@ namespace RogueSquad.Core
         public void Init(GraphicsDeviceManager device, ContentManager content) {
             _device = device;
             _content = content;
+            _liveEntities = new BitArray(MAX_ENTITIES);            
+        }
+
+        const int MAX_ENTITIES = 20000;
+        int _lastFreeEntity;
+        BitArray _liveEntities;
+
+        public int CreateUniqueEntityId()
+        {
+            return GetNextFreeEntity();
+        }
+
+        private int GetNextFreeEntity()
+        {
+            if (_lastFreeEntity >= MAX_ENTITIES  )
+            {
+                _lastFreeEntity = -1;
+            }
+
+            for (int i = 0; i < MAX_ENTITIES; i++)
+            {
+                if (!_liveEntities[i])
+                {
+                    _lastFreeEntity = i;
+                    break;
+                }
+            }
+
+            if (_lastFreeEntity == -1)
+                throw new Exception("Could not acquire a valid ID for the requested Entity!");
+
+            return _lastFreeEntity;         
+        }
+
+        private void RemoveEntity(int id)
+        {
+            _liveEntities[id] = false;
         }
 
     }
 
 
     public sealed class World
-    {
-        int _lastEntityCounter = 0;
-        const int MAX_ENTITIES = 20000;
+    {      
         public List<IRogueSystem> Systems { get; set; }
         public List<IRogueRenderSystem> RenderSystems { get; set; }
-        BitArray KnownEntities;
         public List<RogueEntity> Entities { get; set; }
 
         public World()
         {
-            KnownEntities = new BitArray(MAX_ENTITIES);
+           
             Systems = new List<IRogueSystem>();
             RenderSystems = new List<IRogueRenderSystem>();
             Entities = new List<RogueEntity>();
@@ -63,38 +98,37 @@ namespace RogueSquad.Core
             RenderSystems.Add(system);
         }
 
-        public RogueEntity CreateEntity()
+        public void AddEntity(RogueEntity entity)
         {
-            int freeId = -1;
-            for (int i = 0; i < KnownEntities.Length; i++)
+            
+            foreach (var sys in Systems)
             {
-                if (!KnownEntities[i])
+                //get matching components and add to system
+                var hasTypes = sys.DesiredComponentsTypes.ToDictionary(x => x, y => false);
+                
+                foreach (var compType in sys.DesiredComponentsTypes)
                 {
-                    freeId = i;
-                    break;
+                    hasTypes[compType] = entity.HasComponent(compType);                                                            
                 }
-            }
 
-            if (freeId != -1)
-            {
-                var entity = new RogueEntity { ID = freeId };
-                Entities.Add(entity);
-                return entity;
+                if (hasTypes.All(x => true))
+                    sys.AddEntity(entity);
             }
-            else
-                throw new Exception("No Ids available for creation of new entities!");            
+            // add to world tracking as well
+            Entities.Add(entity);
         }
 
-        public void DestroyEntity(int id)
+        public void UpdateEntity(RogueEntity entity)
         {
-            KnownEntities[id] = false;            
+            //update entity's system subscriptions
         }
+
 
         public void Update(GameTime gameTime)
         {
             foreach (var system in Systems)
             {
-                system.Update(gameTime, Entities);
+                system.Update(gameTime);
             }
         }
 
@@ -108,22 +142,18 @@ namespace RogueSquad.Core
 
     }
 
-    public enum SystemTypes {
-            BasicControllerSystem, MovementSystem, CameraSystem
-    }
 
     public enum ComponentTypes {
         Controller, Position, Movement, Render
     }
 
-    public enum RenderSystemTypes {
-        Render2DSystem
-    }
 
     public interface IRogueSystem
     {
-        void Update(GameTime gametime, IList<RogueEntity> entities);
+        void Update(GameTime gametime);
+        void AddEntity(RogueEntity entity);
 
+        ComponentTypes[] DesiredComponentsTypes { get; set; }
     }
 
     public interface IRogueRenderSystem
@@ -160,72 +190,92 @@ namespace RogueSquad.Core
             }
             batchRef.End();
         }
+
+        public bool Equals(Render2DSystem other)
+        {
+            throw new NotImplementedException();
+        }
     }
 
+    public class ControllerNode
+    {
+        public int Id { get; set; }
+        public PositionComponent Position { get; set; }
+        public BasicControllerComponent Controller { get; set; }
+    }
 
     public class BasicControllingSystem : IRogueSystem
-    {       
+    {
+        public ComponentTypes[] DesiredComponentsTypes { get; set; } = new ComponentTypes[] { ComponentTypes.Controller, ComponentTypes.Position };
+        private IList<ControllerNode> _controllerNodes = new List<ControllerNode>();
+        public BasicControllingSystem()
+        {         
+        }
 
-        public void Update(GameTime gameTime, IList<RogueEntity> entities )
+        public void AddEntity(RogueEntity entity)
+        {           
+            var controller = entity.GetComponentByType(ComponentTypes.Controller) as BasicControllerComponent;
+            var position = entity.GetComponentByType(ComponentTypes.Position) as PositionComponent;
+            _controllerNodes.Add(new ControllerNode { Position = position, Controller = controller, Id = entity.ID });            
+        }
+
+        public void Update(GameTime gameTime)
         {
             var kb = Keyboard.GetState();
-            foreach (var entity in entities)
+            foreach (var controlNode in _controllerNodes)
             {
-                if (entity.HasComponent(ComponentTypes.Controller))
-                {                    
-                    var controller = entity.GetComponentsByType(ComponentTypes.Controller).First() as BasicControllerComponent;
-                    controller.ProcessInput(kb);
+                controlNode.Controller.ProcessInput(kb);
+                if (controlNode.Controller.AnyKeyPressed)
+                {
+                    Vector2 newPos = controlNode.Position.Position;
+                    
 
-                    var position = entity.GetComponentsByType(ComponentTypes.Position).First() as PositionComponent;
-                    //position.Position = new Vector2(0, 0);
-                    if (controller.KeyRetreat)
+                    if (controlNode.Controller.KeyRetreat)
                     {
-                        //var position = entity.GetComponentsByType(ComponentTypes.Position).First() as PositionComponent;
-                        position.Position = new Vector2(0, 0);
+                        controlNode.Position.Position = new Vector2(0, 0);
                     }
 
-                    if (controller.KeyLeft)
+                    if (controlNode.Controller.KeyLeft)
                     {
-                        position.Position = new Vector2(position.Position.X - 1, position.Position.Y);
+                        newPos.X -= 1;
+                        //controlNode.Position.Position = new Vector2(controlNode.Position.Position.X - 1, controlNode.Position.Position.Y);                        
                     }
-                    if (controller.KeyRight)
+                    if (controlNode.Controller.KeyRight)
                     {
-                        position.Position = new Vector2(position.Position.X + 1, position.Position.Y);
+                        newPos.X += 1;
+                        //controlNode.Position.Position = new Vector2(controlNode.Position.Position.X + 1, controlNode.Position.Position.Y);
                     }
-                    if (controller.KeyUp)
+                    if (controlNode.Controller.KeyUp)
                     {
-                        position.Position = new Vector2(position.Position.X , position.Position.Y -1);
+                        newPos.Y -= 1;
+                        //controlNode.Position.Position = new Vector2(controlNode.Position.Position.X, controlNode.Position.Position.Y - 1);
                     }
-                    if (controller.KeyDown)
+                    if (controlNode.Controller.KeyDown)
                     {
-                        position.Position = new Vector2(position.Position.X , position.Position.Y+1);
+                        newPos.Y += 1;
+                        //controlNode.Position.Position = new Vector2(controlNode.Position.Position.X, controlNode.Position.Position.Y + 1);
                     }
-
-                    //do something
+                    controlNode.Position.Position = newPos;
                 }
             }
-
         }
     }
 
     public class RandomMovementSystem : IRogueSystem {
-        public void Update(GameTime gameTime, IList<RogueEntity> entities)
+        public ComponentTypes[] DesiredComponentsTypes { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public void AddEntity(RogueEntity entity)
         {
-            foreach (var entity in entities)
-            {
-                if (entity.HasComponent(ComponentTypes.Movement))
-                {
-                    var position = entity.GetComponentsByType(ComponentTypes.Position).First() as PositionComponent;
-                    
-                    //do something
-                }
-            }
+            throw new NotImplementedException();
+        }
+
+        public void Update(GameTime gameTime)
+        {
+           
 
         }
 
     }
-
-
 
     public class SpriteComponent
     {
@@ -255,17 +305,18 @@ namespace RogueSquad.Core
                 KeyLeft = true;
             if (kb.IsKeyDown(Keys.D))
                 KeyRight = true;
+
+            AnyKeyPressed = KeyUp || KeyDown || KeyLeft || KeyRight || KeyRetreat;
         }
 
         private void Reset()
         {
-            KeyUp = false;
-           
-            KeyDown = false;
-          
-            KeyLeft = false;
-           
+            KeyUp = false;           
+            KeyDown = false;          
+            KeyLeft = false;           
             KeyRight = false;
+            KeyRetreat = false;
+            AnyKeyPressed = false;
         }
 
         public bool KeyRetreat { get; set; }
@@ -273,6 +324,7 @@ namespace RogueSquad.Core
         public bool KeyRight { get; set; }
         public bool KeyUp{ get; set; }
         public bool KeyDown { get; set; }
+        public bool AnyKeyPressed { get; set; }
         public ComponentTypes ComponentType { get; set; } = ComponentTypes.Controller;
     }
 
@@ -281,12 +333,7 @@ namespace RogueSquad.Core
         public ComponentTypes ComponentType { get; set; } = ComponentTypes.Position;
         public Vector2 Position { get; set; } = Vector2.Zero;
     }
-    public class MovementComponent
-    {
-        public double Speed { get; set; } = 0.0;
-    }
-    
-
+ 
 
     public class RogueEntity {
         public int ID { get; set; }               
@@ -311,7 +358,11 @@ namespace RogueSquad.Core
             }
             return false;
         }
-     
+
+        public IEnumerable<IRogueComponent> GetComponents()
+        {
+            return _components;
+        }
 
         public IEnumerable<IRogueComponent> GetComponentsByType(ComponentTypes type)
         {
@@ -321,39 +372,21 @@ namespace RogueSquad.Core
         }
 
 
-        //public Vector2 Position { get; set; }
-        ////ublic List<RogueEntity>
+        public IRogueComponent GetComponentByType(ComponentTypes type)
+        {
+            foreach (var component in _components)
+                if (component.ComponentType == type)
+                    return component;
+            return null;
+        }
 
-        //InputComponent _input;
-        //RenderableComponent _render;
-        //PhysicsComponent _physics;
-
-        //void Update()
-
-        //public RogueEntity(InputComponent input, PhysicsComponent physics, RenderableComponent render)
-        //{
-        //    _input = input;
-        //    _physics = physics;
-        //    _render = render;
-        //}
+        public static RogueEntity CreateNew()
+        {
+            return new RogueEntity { ID = Engine.Instance.CreateUniqueEntityId() };
+        }
+       
     }
 
-    public class InputComponent
-    { }
-
-    public class IComponent {
-
-    }
-
-
-    public class MoveableComponent {
-        public Vector2 Position { get; set; }
-        public Rectangle BoundingRectangle { get; set; }        
-    }
-
-    public class PhysicsComponent {
-        public Rectangle BoundingRectangle { get; set; }        
-    }
 
     public class RenderableComponent : IRogueComponent {
         public ComponentTypes ComponentType { get; set; } = ComponentTypes.Render;

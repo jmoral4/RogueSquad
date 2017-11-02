@@ -20,6 +20,8 @@ namespace RogueSquad.Client.Dx
         ConsoleComponent _console;
         World world;
         FramesPerSecondCounter fps;
+        int w = 800;
+        int h = 600;
 
         public Game1()
         {
@@ -32,8 +34,10 @@ namespace RogueSquad.Client.Dx
             graphics.SynchronizeWithVerticalRetrace = false;
             _console = new ConsoleComponent(this);
             Components.Add(_console);
-            graphics.PreferredBackBufferWidth = 1920;
-            graphics.PreferredBackBufferHeight = 1080;
+            //graphics.PreferredBackBufferWidth = 1920;
+            //graphics.PreferredBackBufferHeight = 1080;
+            graphics.PreferredBackBufferWidth = w;
+            graphics.PreferredBackBufferHeight = h;
             fps = new FramesPerSecondCounter();
         }
 
@@ -81,12 +85,17 @@ namespace RogueSquad.Client.Dx
 
             world = new World();
             world.RegisterSystem(new BasicControllingSystem());
-            world.RegisterRenderSystem(new Render2DSystem(spriteBatch));
+            world.RegisterRenderSystem(new Render2DSystem(spriteBatch));            
 
-            RogueEntity player = world.CreateEntity();
+            //uses Engine.Instance.CreateUniqueEntityId()
+            RogueEntity player = RogueEntity.CreateNew();
             player.AddComponent(new PositionComponent { Position = new Vector2(100, 100) });
             player.AddComponent(new RenderableComponent { Texture = Content.Load<Texture2D>("Textures/ro") });
             player.AddComponent(new BasicControllerComponent());
+
+
+            world.AddEntity(player);
+            world.UpdateEntity(player);
 
             CreateRandomNPCS();
         }
@@ -96,10 +105,11 @@ namespace RogueSquad.Client.Dx
             Random r = new Random();
             for (int i = 0; i < 1000; i++)
             {
-                RogueEntity player = world.CreateEntity();
-                player.AddComponent(new PositionComponent { Position = new Vector2(r.Next(0,1920-20), r.Next(0,1080-20)) });
+                RogueEntity player = RogueEntity.CreateNew();
+                player.AddComponent(new PositionComponent { Position = new Vector2(r.Next(0,w-20), r.Next(0,h-20)) });
                 player.AddComponent(new RenderableComponent { Texture = Content.Load<Texture2D>("Textures/ro") });
                 player.AddComponent(new BasicControllerComponent());
+                world.AddEntity(player);
             }
 
         }

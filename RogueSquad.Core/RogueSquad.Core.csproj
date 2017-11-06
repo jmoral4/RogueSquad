@@ -38,9 +38,36 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\BasicControllerComponent.cs" />
+    <Compile Include="Components\CollidableComponent.cs" />
+    <Compile Include="Nodes\CollisionNode.cs" />
+    <Compile Include="Nodes\INode.cs" />
+    <Compile Include="Systems\BasicControllingSystem.cs" />
+    <Compile Include="Nodes\ControllerNode.cs" />
+    <Compile Include="Components\IRogueComponent.cs" />
+    <Compile Include="Components\PositionComponent.cs" />
+    <Compile Include="Systems\CollisionSystem.cs" />
+    <Compile Include="Systems\DebugRenderSystem.cs" />
+    <Compile Include="Systems\GameplaySystem.cs" />
+    <Compile Include="Systems\RandomMovementSystem.cs" />
+    <Compile Include="Components\RenderableComponent.cs" />
+    <Compile Include="Nodes\RenderNode.cs" />
+    <Compile Include="Components\ComponentTypes.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="RogueEntity.cs" />
+    <Compile Include="Components\SpriteComponent.cs" />
+    <Compile Include="Systems\IRogueRenderSystem.cs" />
+    <Compile Include="Systems\IRogueSystem.cs" />
     <Compile Include="Primitives2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Systems\Render2DSystem.cs" />
+    <Compile Include="World.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Extended\Source\MonoGame.Extended\MonoGame.Extended.csproj">
+      <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
+      <Name>MonoGame.Extended</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

@@ -7,6 +7,8 @@ using GeonBit.UI.Entities;
 using QuakeConsole;
 using System;
 using MonoGame.Extended;
+using RogueSquad.Core.Systems;
+using RogueSquad.Core.Components;
 
 namespace RogueSquad.Client.Dx
 {
@@ -85,12 +87,15 @@ namespace RogueSquad.Client.Dx
 
             world = new World();
             world.RegisterSystem(new BasicControllingSystem());
-            world.RegisterRenderSystem(new Render2DSystem(spriteBatch));            
+            world.RegisterSystem(new CollisionSystem());
+            world.RegisterRenderSystem(new Render2DSystem(spriteBatch));
+            //world.RegisterRenderSystem(new DebugRenderSystem(spriteBatch));
 
             //uses Engine.Instance.CreateUniqueEntityId()
             RogueEntity player = RogueEntity.CreateNew();
             player.AddComponent(new PositionComponent { Position = new Vector2(100, 100) });
             player.AddComponent(new RenderableComponent { Texture = Content.Load<Texture2D>("Textures/ro") });
+            player.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(100, 100, 80, 80) });
             player.AddComponent(new BasicControllerComponent());
 
 
@@ -103,13 +108,16 @@ namespace RogueSquad.Client.Dx
         private void CreateRandomNPCS()
         {
             Random r = new Random();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 5; i++)
             {
                 RogueEntity player = RogueEntity.CreateNew();
-                player.AddComponent(new PositionComponent { Position = new Vector2(r.Next(0,w-20), r.Next(0,h-20)) });
+                var pos = new Vector2(r.Next(0, w - 20), r.Next(0, h - 20));
+                player.AddComponent(new PositionComponent { Position = pos });
                 player.AddComponent(new RenderableComponent { Texture = Content.Load<Texture2D>("Textures/ro") });
-                player.AddComponent(new BasicControllerComponent());
+                player.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(pos.X, pos.Y , 80, 80) });
                 world.AddEntity(player);
+                
+                
             }
 
         }

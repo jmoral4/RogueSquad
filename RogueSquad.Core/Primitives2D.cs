@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -295,6 +296,13 @@ namespace RogueSquad.Core.Primitives
         public static void DrawRectangle(this SpriteBatch spriteBatch, Vector2 location, Vector2 size, Color color, float thickness)
         {
             DrawRectangle(spriteBatch, new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y), color, thickness);
+        }
+
+
+        public static void DrawRectangleF(this SpriteBatch spriteBatch, RectangleF rect, Color color)
+        {
+            DrawRectangle(spriteBatch, rect.Position, rect.Size, color);
+
         }
 
         #endregion

@@ -11,6 +11,7 @@ namespace RogueSquad.Core.Nodes
     {
         public int Id { get; set; }
         public int CollidedWith { get; set; }
+        public bool Checked { get; set; }
         public bool HadCollision => CollisionData.HasCollision;
         public PositionComponent Position { get; set; }
         public CollidableComponent CollisionData { get; set; }

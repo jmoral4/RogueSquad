@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RogueSquad.Core.Nodes;
 using RogueSquad.Core.Components;
 using RogueSquad.Core.Primitives;
+using RogueSquad.Core.Nodes;
 
 namespace RogueSquad.Core.Systems
 {
@@ -15,6 +15,7 @@ namespace RogueSquad.Core.Systems
     {
         SpriteBatch batchRef;
         public IList<DebugRenderNode> _renderNodes = new List<DebugRenderNode>();
+        public ComponentTypes[] DesiredComponentsTypes { get; set; } = new ComponentTypes[] { ComponentTypes.SpriteComponent, ComponentTypes.PositionComponent, ComponentTypes.CollidableComponent };
         public DebugRenderSystem(SpriteBatch batch)
         {
             batchRef = batch;
@@ -22,7 +23,7 @@ namespace RogueSquad.Core.Systems
 
         public void AddEntity(RogueEntity entity)
         {
-            var render = entity.GetComponentByType(ComponentTypes.RenderableComponent) as RenderableComponent;
+            var render = entity.GetComponentByType(ComponentTypes.SpriteComponent) as SpriteComponent;
             var position = entity.GetComponentByType(ComponentTypes.PositionComponent) as PositionComponent;
             var collision = entity.GetComponentByType(ComponentTypes.CollidableComponent) as CollidableComponent;
             _renderNodes.Add(new DebugRenderNode { Position = position, Renderable = render, Collision=collision, Id = entity.ID });
@@ -40,17 +41,7 @@ namespace RogueSquad.Core.Systems
             }
             batchRef.End();
         }
-    }
-
-
-    public class DebugRenderNode : INode
-    {
-        public int Id { get; set; }
-        public RenderableComponent Renderable { get; set; }
-        public PositionComponent Position { get; set; }
-        public CollidableComponent Collision { get; set; }
-
-
+        public void Update(GameTime gameTime) { }
     }
 
 }

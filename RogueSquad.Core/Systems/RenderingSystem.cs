@@ -10,18 +10,19 @@ using RogueSquad.Core.Components;
 namespace RogueSquad.Core.Systems
 {
 
-    public class Render2DSystem : IRogueRenderSystem
+    public class RenderingSystem : IRogueRenderSystem
     {
         SpriteBatch batchRef;
         public IList<RenderNode> _renderNodes = new List<RenderNode>();
-        public Render2DSystem(SpriteBatch batch)
+        public ComponentTypes[] DesiredComponentsTypes { get; set; } = new ComponentTypes[] { ComponentTypes.SpriteComponent, ComponentTypes.PositionComponent };
+        public RenderingSystem(SpriteBatch batch)
         {
             batchRef = batch;
         }
 
         public void AddEntity(RogueEntity entity)
         {
-            var render = entity.GetComponentByType(ComponentTypes.RenderableComponent) as RenderableComponent;
+            var render = entity.GetComponentByType(ComponentTypes.SpriteComponent) as SpriteComponent;
             var position = entity.GetComponentByType(ComponentTypes.PositionComponent) as PositionComponent;
             _renderNodes.Add(new RenderNode { Position = position, Renderalble =  render, Id = entity.ID });
         }
@@ -35,6 +36,8 @@ namespace RogueSquad.Core.Systems
             }
             batchRef.End();
         }
+
+        public void Update(GameTime gameTime) { }
     }
 
 }

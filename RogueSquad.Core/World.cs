@@ -36,31 +36,54 @@ namespace RogueSquad.Core
 
         public void AddEntity(RogueEntity entity)
         {
-            
+
+            AddEntityToSystems(entity);
+            AddEntityToRenderSystems(entity);
+
+            // add to world tracking as well - probably not needed in the future
+            Entities.Add(entity);
+        }
+
+        public void RemoveEntity(RogueEntity entity)
+        {
+            // remove from each system
+
+        }
+
+
+        private void AddEntityToSystems(RogueEntity entity)
+        {
             foreach (var sys in Systems)
             {
                 //get matching components and add to system
                 var hasTypes = sys.DesiredComponentsTypes.ToDictionary(x => x, y => false);
-                
+
                 foreach (var compType in sys.DesiredComponentsTypes)
                 {
-                    hasTypes[compType] = entity.HasComponent(compType);                                                            
+                    hasTypes[compType] = entity.HasComponent(compType);
                 }
 
-                if (hasTypes.All(x => x.Value == true))
+                if (hasTypes.All(x => x.Value))
                     sys.AddEntity(entity);
-           
             }
-
-            if (entity.HasComponent(ComponentTypes.RenderableComponent) && entity.HasComponent(ComponentTypes.PositionComponent))
-            {
-                foreach (var renderSys in RenderSystems)
-                    renderSys.AddEntity(entity);
-            }
-
-            // add to world tracking as well
-            Entities.Add(entity);
+            
         }
+
+        private void AddEntityToRenderSystems(RogueEntity entity)
+        {
+            foreach (var sys in RenderSystems)
+            {
+                var hasTypes = sys.DesiredComponentsTypes.ToDictionary(x => x, y => false);
+                foreach (var compType in sys.DesiredComponentsTypes)
+                {
+                    hasTypes[compType] = entity.HasComponent(compType);
+                }
+
+                if (hasTypes.All(x => x.Value))
+                    sys.AddEntity(entity);
+            }
+        }
+
 
         public void UpdateEntity(RogueEntity entity)
         {

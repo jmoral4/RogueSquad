@@ -22,8 +22,9 @@ namespace RogueSquad.Client.Dx
         ConsoleComponent _console;
         World world;
         FramesPerSecondCounter fps;
-        int w = 800;
-        int h = 600;
+        int w = 1920;
+        int h = 1080;
+        int UpdatesPerSecond = 25;
 
         public Game1()
         {
@@ -41,6 +42,7 @@ namespace RogueSquad.Client.Dx
             graphics.PreferredBackBufferWidth = w;
             graphics.PreferredBackBufferHeight = h;
             fps = new FramesPerSecondCounter();
+            
         }
 
         /// <summary>
@@ -60,6 +62,9 @@ namespace RogueSquad.Client.Dx
             //player.AddComponent(new BasicControllerComponent());
             base.Initialize();
         }
+
+        Vector2 spriteDimensions = new Vector2(80, 80);
+        TileRenderingSystem _trs;
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -84,37 +89,45 @@ namespace RogueSquad.Client.Dx
             
             // add a button at the bottom
             panel.AddChild(btn);
+            Vector2 startLocation = new Vector2(100, 100);
+
 
             world = new World();
             world.RegisterSystem(new BasicControllingSystem());
             world.RegisterSystem(new CollisionSystem());
-            world.RegisterRenderSystem(new Render2DSystem(spriteBatch));
-            //world.RegisterRenderSystem(new DebugRenderSystem(spriteBatch));
+            //world.RegisterSystem(new OrderedCollisionSystem(w, h));
+            world.RegisterRenderSystem(new RenderingSystem(spriteBatch));
+            world.RegisterRenderSystem(new DebugRenderSystem(spriteBatch));
+
+
 
             //uses Engine.Instance.CreateUniqueEntityId()
             RogueEntity player = RogueEntity.CreateNew();
-            player.AddComponent(new PositionComponent { Position = new Vector2(100, 100) });
-            player.AddComponent(new RenderableComponent { Texture = Content.Load<Texture2D>("Textures/ro") });
-            player.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(100, 100, 80, 80) });
+            player.AddComponent(new PositionComponent { Position = startLocation });
+            player.AddComponent(new SpriteComponent { Texture = Content.Load<Texture2D>("Assets/robit") });
+            player.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(startLocation, spriteDimensions) });
             player.AddComponent(new BasicControllerComponent());
 
 
             world.AddEntity(player);
             world.UpdateEntity(player);
 
-            CreateRandomNPCS();
+            //CreateRandomNPCS();
+            _trs = new TileRenderingSystem(spriteBatch, Content.Load<Texture2D>("Assets/grass"), Content.Load<Texture2D>("Assets/stone_tile"), Content.Load<SpriteFont>("Fonts/gamefont"));
+            _trs.CreateMap(10,10);
+
         }
 
         private void CreateRandomNPCS()
         {
             Random r = new Random();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 100; i++)
             {
                 RogueEntity player = RogueEntity.CreateNew();
                 var pos = new Vector2(r.Next(0, w - 20), r.Next(0, h - 20));
                 player.AddComponent(new PositionComponent { Position = pos });
-                player.AddComponent(new RenderableComponent { Texture = Content.Load<Texture2D>("Textures/ro") });
-                player.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(pos.X, pos.Y , 80, 80) });
+                player.AddComponent(new SpriteComponent { Texture = Content.Load<Texture2D>("Textures/ro") });
+                player.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(pos , spriteDimensions) });
                 world.AddEntity(player);
                 
                 
@@ -134,13 +147,28 @@ namespace RogueSquad.Client.Dx
 
         KeyboardState previousKeyboardState;
         KeyboardState currentKeyboardState;
+        double _elapsed;
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        
         protected override void Update(GameTime gameTime)
         {
+            _elapsed += gameTime.ElapsedGameTime.TotalMilliseconds;
+            fps.Update(gameTime);
+            // GeonBit.UIL update UI manager
+            UserInterface.Active.Update(gameTime);
+
+            if (_elapsed < 40)
+            {
+                return; //no update unless 40 milliseconds have passed;
+            }
+            else {
+                _elapsed = 0;
+            }
+            
             currentKeyboardState = Keyboard.GetState();
             // Exit() is obsolete on iOS
             #if !__IOS__ && !__TVOS__
@@ -148,8 +176,7 @@ namespace RogueSquad.Client.Dx
                 Exit();
             #endif            
 
-            // GeonBit.UIL update UI manager
-            UserInterface.Active.Update(gameTime);
+
             // TODO: Add your update logic here
             // cool.Exec();
             
@@ -162,7 +189,7 @@ namespace RogueSquad.Client.Dx
                 world.Update(gameTime);
 
             previousKeyboardState = currentKeyboardState;
-            fps.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -176,12 +203,12 @@ namespace RogueSquad.Client.Dx
             fps.Draw(gameTime);
             GraphicsDevice.Clear(Color.CornflowerBlue);
             // GeonBit.UI: draw UI using the spriteBatch you created above
-            UserInterface.Active.Draw(spriteBatch);
+             _trs.Draw(gameTime);
             // TODO: Add your drawing code here
             world.Draw(gameTime);
             
-            
 
+            UserInterface.Active.Draw(spriteBatch);
             base.Draw(gameTime);
         }
     }

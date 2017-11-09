@@ -2,8 +2,8 @@
 
 namespace RogueSquad.Core.Components
 {
-    public class RenderableComponent : IRogueComponent {
-        public ComponentTypes ComponentType { get; set; } = ComponentTypes.RenderableComponent;
+    public class SpriteComponent : IRogueComponent {
+        public ComponentTypes ComponentType { get; set; } = ComponentTypes.SpriteComponent;
         public Texture2D Texture { get; set; }
 
     }

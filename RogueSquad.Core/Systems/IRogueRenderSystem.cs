@@ -12,10 +12,9 @@ using Microsoft.Xna.Framework.Input;
 namespace RogueSquad.Core.Systems
 {
 
-    public interface IRogueRenderSystem
+    public interface IRogueRenderSystem : IRogueSystem
     {
         void Draw(GameTime gameTime);
-        void AddEntity(RogueEntity entity);
 
     }
 

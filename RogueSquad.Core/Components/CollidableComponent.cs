@@ -11,7 +11,8 @@ namespace RogueSquad.Core.Components
     public class CollidableComponent : IRogueComponent
     {
         public RectangleF BoundingRectangle { get; set; }
-        public bool HasCollision { get; set; }        
+        public bool HasCollision { get; set; }    
+        public bool IsStatic { get; set; }
         public void Collided()
         {
             this.HasCollision = true;

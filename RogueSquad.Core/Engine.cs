@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using RogueSquad.Core.Components;
 using System;
 using System.Collections;
 using System.Linq;
@@ -21,10 +24,10 @@ namespace RogueSquad.Core
         {
         }
 
-        private GraphicsDeviceManager _device;
+        private GraphicsDevice _device;
         private ContentManager _content;
 
-        public void Init(GraphicsDeviceManager device, ContentManager content) {
+        public void Init(GraphicsDevice device, ContentManager content) {
             _device = device;
             _content = content;
             _liveEntities = new BitArray(MAX_ENTITIES);            
@@ -33,6 +36,9 @@ namespace RogueSquad.Core
         const int MAX_ENTITIES = 20000;
         int _lastFreeEntity;
         BitArray _liveEntities;
+
+        public int ScreenWidth { get; set; }
+        public int ScreenHeight { get; set; }
 
         public int CreateUniqueEntityId()
         {
@@ -62,13 +68,41 @@ namespace RogueSquad.Core
             return _lastFreeEntity;         
         }
 
+        public Texture2D GetTexture(string fullNameAndPath)
+        {
+            return _content.Load<Texture2D>(fullNameAndPath);
+        }
+
         private void RemoveEntity(int id)
         {
             _liveEntities[id] = false;
         }
 
-    }    
+    }
 
+
+    public class EntityGenerator
+    {
+        private ContentManager _content;
+        public EntityGenerator(ContentManager content)
+        {
+            _content = content;
+        }
+        public RogueEntity CreateOnScreenEntity(string entityType, Vector2 position)
+        {
+            if (entityType == "basic_enemy" )
+            {
+                var texture = Engine.Instance.GetTexture("Textures/ro");
+                RogueEntity enemy = RogueEntity.CreateNew();                
+                enemy.AddComponent(new PositionComponent { Position = position });
+                enemy.AddComponent(new SpriteComponent { Texture = texture});
+                enemy.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(position.X, position.Y, texture.Bounds.Width, texture.Bounds.Height) });
+                return enemy;
+            }
+
+            return null;
+        }
+    }
   
 
 }

@@ -5,7 +5,7 @@ using System;
 namespace RogueSquad.Core.Systems
 {
     public class RandomMovementSystem : IRogueSystem {
-        public ComponentTypes[] DesiredComponentsTypes { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public ComponentTypes[] RequiredComponents { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public void AddEntity(RogueEntity entity)
         {

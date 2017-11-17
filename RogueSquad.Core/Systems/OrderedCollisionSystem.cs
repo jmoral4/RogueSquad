@@ -27,7 +27,7 @@ namespace RogueSquad.Core.Systems
             }
         }
 
-        public ComponentTypes[] DesiredComponentsTypes { get; set; } = new ComponentTypes[] { ComponentTypes.CollidableComponent };
+        public ComponentTypes[] RequiredComponents { get; set; } = new ComponentTypes[] { ComponentTypes.CollidableComponent };
         private BTree<int, IList<CollisionNode>> _collisionNodes = new BTree<int, IList<CollisionNode>>(16);
         private IList<CollisionNode> _allNodes = new List<CollisionNode>();
 

@@ -14,7 +14,7 @@ namespace RogueSquad.Core.Systems
        
         void AddEntity(RogueEntity entity);
 //        void RemoveEntity(RogueEntity entity);
-        ComponentTypes[] DesiredComponentsTypes { get; set; }
+        ComponentTypes[] RequiredComponents { get; set; }
     }
 
 }

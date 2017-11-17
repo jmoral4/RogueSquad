@@ -1,39 +1,24 @@
 ﻿using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace RogueSquad.Core.Components
 {
+    public class KeyMapping
+    {
+        public Keys Key { get; set; }
+        public Action OnKeyPress { get; set; }
+    }
+
     public class BasicControllerComponent : IRogueComponent
     {
-
-        public BasicControllerComponent()
+        KeyMapping[] _keyMapping;
+        
+        public BasicControllerComponent(KeyMapping[] keymapping = null)
         {
-
+            _keyMapping = keymapping;
         }
 
-        public void ProcessInput(KeyboardState kb)
-        {
-            Reset();
-            if (kb.IsKeyDown(Keys.W))
-                KeyUp = true;
-            if (kb.IsKeyDown(Keys.S))
-                KeyDown = true;
-            if (kb.IsKeyDown(Keys.A))
-                KeyLeft = true;
-            if (kb.IsKeyDown(Keys.D))
-                KeyRight = true;
 
-            AnyKeyPressed = KeyUp || KeyDown || KeyLeft || KeyRight || KeyRetreat;
-        }
-
-        private void Reset()
-        {
-            KeyUp = false;           
-            KeyDown = false;          
-            KeyLeft = false;           
-            KeyRight = false;
-            KeyRetreat = false;
-            AnyKeyPressed = false;
-        }
 
         public bool KeyRetreat { get; set; }
         public bool KeyLeft { get; set; }
@@ -41,6 +26,7 @@ namespace RogueSquad.Core.Components
         public bool KeyUp{ get; set; }
         public bool KeyDown { get; set; }
         public bool AnyKeyPressed { get; set; }
+        public bool KeyCreateRandomEntities { get; set; }
         public ComponentTypes ComponentType { get; set; } = ComponentTypes.BasicControllerComponent;
     }
 

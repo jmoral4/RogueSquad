@@ -12,7 +12,7 @@ namespace RogueSquad.Core.Systems
 {
     public class CollisionSystem : IRogueSystem
     {
-        public ComponentTypes[] DesiredComponentsTypes { get; set; } = new ComponentTypes[] { ComponentTypes.CollidableComponent };
+        public ComponentTypes[] RequiredComponents { get; set; } = new ComponentTypes[] { ComponentTypes.CollidableComponent };
         private IList<CollisionNode> _collisionNodes = new List<CollisionNode>();
 
         public void AddEntity(RogueEntity entity)
@@ -37,7 +37,7 @@ namespace RogueSquad.Core.Systems
                 //check all collissions and...?
                 foreach (var n in _collisionNodes)
                 {
-                    if (node.Id != n.Id && !n.CollisionData.HasCollision)
+                    if (node.Id != n.Id )
                     {
                        //have to create a new collision rect based on the current location
                        
@@ -60,6 +60,8 @@ namespace RogueSquad.Core.Systems
             {
                 //update rect for the correct object only. 
                 node.CollisionData.UpdateBoundingRectangle(new RectangleF(node.Position.Position.X, node.Position.Position.Y, node.CollisionData.BoundingRectangle.Width, node.CollisionData.BoundingRectangle.Height));
+                node.CollisionData.ResetCollision();
+                node.CollidedWith = 0;
             }
         }
 

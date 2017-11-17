@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RogueSquad.Client.Dx", "RogueSquad.Client.Dx\RogueSquad.Client.Dx.csproj", "{761A0EE9-608A-4428-80E8-0E65E011C3A8}"
 EndProject
@@ -38,6 +38,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RogueSquad.Core", "RogueSquad.Core\RogueSquad.Core.csproj", "{668FFB7F-8DE2-4704-989D-443B1D77E20A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pathfinding Demo", "..\A-Pathfinding-and-movement-system-demo\Pathfinding Demo\Pathfinding Demo\Pathfinding Demo.csproj", "{F4F4BA08-2CED-4B59-AF67-9070EE8B3A87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RogueSquad.Client.Uwp", "RogueSquad.Client.Uwp\RogueSquad.Client.Uwp.csproj", "{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -269,6 +271,26 @@ Global
 		{F4F4BA08-2CED-4B59-AF67-9070EE8B3A87}.Release|x64.ActiveCfg = Release|x86
 		{F4F4BA08-2CED-4B59-AF67-9070EE8B3A87}.Release|x86.ActiveCfg = Release|x86
 		{F4F4BA08-2CED-4B59-AF67-9070EE8B3A87}.Release|x86.Build.0 = Release|x86
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Debug|ARM.ActiveCfg = Debug|ARM
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Debug|ARM.Build.0 = Debug|ARM
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Debug|ARM.Deploy.0 = Debug|ARM
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Debug|x64.ActiveCfg = Debug|x64
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Debug|x64.Build.0 = Debug|x64
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Debug|x64.Deploy.0 = Debug|x64
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Debug|x86.ActiveCfg = Debug|x86
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Debug|x86.Build.0 = Debug|x86
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Debug|x86.Deploy.0 = Debug|x86
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Release|Any CPU.ActiveCfg = Release|x86
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Release|ARM.ActiveCfg = Release|ARM
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Release|ARM.Build.0 = Release|ARM
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Release|ARM.Deploy.0 = Release|ARM
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Release|x64.ActiveCfg = Release|x64
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Release|x64.Build.0 = Release|x64
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Release|x64.Deploy.0 = Release|x64
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Release|x86.ActiveCfg = Release|x86
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Release|x86.Build.0 = Release|x86
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -288,6 +310,7 @@ Global
 		{1CF61F4F-A2EE-49BF-95D0-379E870DE90E} = {78FD5ACC-C789-428C-9B9F-BE28F7486063}
 		{1DD7D455-8710-44A5-B275-8606EB78D80E} = {78FD5ACC-C789-428C-9B9F-BE28F7486063}
 		{F4F4BA08-2CED-4B59-AF67-9070EE8B3A87} = {78FD5ACC-C789-428C-9B9F-BE28F7486063}
+		{58FDD9BC-9A26-48B2-81DF-92B578AF7E38} = {8ABCC8B0-B5AC-438E-BDC2-3BF6C72B282B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A42FD682-4762-4709-A8CC-B2E25FF81732}

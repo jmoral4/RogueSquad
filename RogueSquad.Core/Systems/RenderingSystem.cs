@@ -14,8 +14,8 @@ namespace RogueSquad.Core.Systems
     {
         SpriteBatch batchRef;
         public IList<RenderNode> _renderNodes = new List<RenderNode>();
-        public ComponentTypes[] DesiredComponentsTypes { get; set; } = new ComponentTypes[] { ComponentTypes.SpriteComponent, ComponentTypes.PositionComponent };
-        public RenderingSystem(SpriteBatch batch)
+        public ComponentTypes[] RequiredComponents { get; set; } = new ComponentTypes[] { ComponentTypes.SpriteComponent, ComponentTypes.PositionComponent };
+        public RenderingSystem(SpriteBatch batch )
         {
             batchRef = batch;
         }

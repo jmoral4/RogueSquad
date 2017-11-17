@@ -41,7 +41,14 @@
     <Compile Include="Algorithms\BTree.cs" />
     <Compile Include="Components\BasicControllerComponent.cs" />
     <Compile Include="Components\CollidableComponent.cs" />
+    <Compile Include="Components\General\GameScreen.cs" />
+    <Compile Include="Components\General\InputAction.cs" />
+    <Compile Include="Components\General\InputState.cs" />
+    <Compile Include="Components\General\IScreenFactory.cs" />
+    <Compile Include="Components\General\ScreenFactory.cs" />
+    <Compile Include="Components\General\ScreenManager.cs" />
     <Compile Include="Components\PhysicalComponent.cs" />
+    <Compile Include="Gsd\World.cs" />
     <Compile Include="Nodes\CollisionNode.cs" />
     <Compile Include="Nodes\INode.cs" />
     <Compile Include="Systems\BasicControllingSystem.cs" />
@@ -73,5 +80,6 @@
       <Name>MonoGame.Extended</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

@@ -6,12 +6,15 @@ using RogueSquad.Core.Nodes;
 
 namespace RogueSquad.Core.Systems
 {
+    // tanslate keyboard/controller input into game control commands (stored in the controller component/node)
     public class BasicControllingSystem : IRogueSystem
     {
-        public ComponentTypes[] DesiredComponentsTypes { get; set; } = new ComponentTypes[] { ComponentTypes.BasicControllerComponent, ComponentTypes.PositionComponent };
+        public ComponentTypes[] RequiredComponents { get; set; } = new ComponentTypes[] { ComponentTypes.BasicControllerComponent, ComponentTypes.PositionComponent };
         private IList<ControllerNode> _controllerNodes = new List<ControllerNode>();
-        public BasicControllingSystem()
-        {         
+        World _worldRef;
+        public BasicControllingSystem(World world)
+        {
+            _worldRef = world;
         }
 
         public void AddEntity(RogueEntity entity)
@@ -26,40 +29,38 @@ namespace RogueSquad.Core.Systems
             var kb = Keyboard.GetState();
             foreach (var controlNode in _controllerNodes)
             {
-                controlNode.Controller.ProcessInput(kb);
-                if (controlNode.Controller.AnyKeyPressed)
-                {
-                    Vector2 newPos = controlNode.Position.Position;                    
-
-                    if (controlNode.Controller.KeyRetreat)
-                    {
-                        controlNode.Position.Position = new Vector2(0, 0);
-                    }
-
-                    if (controlNode.Controller.KeyLeft)
-                    {
-                        newPos.X -= 1;
-                        //controlNode.Position.Position = new Vector2(controlNode.Position.Position.X - 1, controlNode.Position.Position.Y);                        
-                    }
-                    if (controlNode.Controller.KeyRight)
-                    {
-                        newPos.X += 1;
-                        //controlNode.Position.Position = new Vector2(controlNode.Position.Position.X + 1, controlNode.Position.Position.Y);
-                    }
-                    if (controlNode.Controller.KeyUp)
-                    {
-                        newPos.Y -= 1;
-                        //controlNode.Position.Position = new Vector2(controlNode.Position.Position.X, controlNode.Position.Position.Y - 1);
-                    }
-                    if (controlNode.Controller.KeyDown)
-                    {
-                        newPos.Y += 1;
-                        //controlNode.Position.Position = new Vector2(controlNode.Position.Position.X, controlNode.Position.Position.Y + 1);
-                    }
-                    controlNode.Position.Position = newPos;
-                }
+                ProcessInput(kb, controlNode);                               
             }
         }
+
+        public void ProcessInput(KeyboardState kb, ControllerNode controllerNode)
+        {
+            Reset(controllerNode);
+            if (kb.IsKeyDown(Keys.W))
+                controllerNode.Controller.KeyUp = true;
+            if (kb.IsKeyDown(Keys.S))
+                controllerNode.Controller.KeyDown = true;
+            if (kb.IsKeyDown(Keys.A))
+                controllerNode.Controller.KeyLeft = true;
+            if (kb.IsKeyDown(Keys.D))
+                controllerNode.Controller.KeyRight = true;
+            if (kb.IsKeyDown(Keys.Space))
+                controllerNode.Controller.KeyCreateRandomEntities = true;
+
+            controllerNode.Controller.AnyKeyPressed = controllerNode.Controller.KeyUp || controllerNode.Controller.KeyDown || controllerNode.Controller.KeyLeft || controllerNode.Controller.KeyRight || controllerNode.Controller.KeyRetreat || controllerNode.Controller.KeyCreateRandomEntities;
+        }
+
+        private void Reset(ControllerNode controllerNode)
+        {
+            controllerNode.Controller.KeyUp = false;
+            controllerNode.Controller.KeyDown = false;
+            controllerNode.Controller.KeyLeft = false;
+            controllerNode.Controller.KeyRight = false;
+            controllerNode.Controller.KeyRetreat = false;
+            controllerNode.Controller.KeyCreateRandomEntities = false;
+            controllerNode.Controller.AnyKeyPressed = false;
+        }
+
     }
 
   

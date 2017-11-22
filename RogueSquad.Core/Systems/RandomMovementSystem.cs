@@ -11,7 +11,11 @@ namespace RogueSquad.Core.Systems
         {
             throw new NotImplementedException();
         }
-
+        public bool HasEntity(RogueEntity entity)
+        {
+         
+            return false;
+        }
         public void Update(GameTime gameTime)
         {
            

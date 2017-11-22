@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\BTree.cs" />
+    <Compile Include="Components\AIComponent.cs" />
     <Compile Include="Components\BasicControllerComponent.cs" />
     <Compile Include="Components\CollidableComponent.cs" />
     <Compile Include="Components\General\GameScreen.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="Components\General\ScreenManager.cs" />
     <Compile Include="Components\PhysicalComponent.cs" />
     <Compile Include="Gsd\World.cs" />
+    <Compile Include="Nodes\AINode.cs" />
     <Compile Include="Nodes\CollisionNode.cs" />
     <Compile Include="Nodes\INode.cs" />
     <Compile Include="Systems\BasicControllingSystem.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="Primitives2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Systems\RenderingSystem.cs" />
+    <Compile Include="Systems\TaskSchedulerSystem.cs" />
     <Compile Include="Systems\TileRenderer.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>

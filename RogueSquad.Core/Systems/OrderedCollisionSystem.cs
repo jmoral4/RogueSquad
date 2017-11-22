@@ -45,6 +45,11 @@ namespace RogueSquad.Core.Systems
             _collisionNodes.Search(quadrant).Pointer.Add(node);
             _allNodes.Add(node);
         }
+        public bool HasEntity(RogueEntity entity)
+        {
+           
+            return false;
+        }
 
 
         public int GetTreeLocation(Vector2 position)

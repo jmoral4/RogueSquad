@@ -39,6 +39,7 @@ namespace RogueSquad.Core
 
         public int ScreenWidth { get; set; }
         public int ScreenHeight { get; set; }
+        public int DesiredFPS { get; set; }
 
         public int CreateUniqueEntityId()
         {
@@ -88,13 +89,13 @@ namespace RogueSquad.Core
         {
             _content = content;
         }
-        public RogueEntity CreateOnScreenEntity(string entityType, Vector2 position)
+        public RogueEntity CreateOnScreenEntity(string entityType, Vector2 position, float speed)
         {
             if (entityType == "basic_enemy" )
             {
                 var texture = Engine.Instance.GetTexture("Textures/ro");
                 RogueEntity enemy = RogueEntity.CreateNew();                
-                enemy.AddComponent(new PositionComponent { Position = position });
+                enemy.AddComponent(new PositionComponent { Position = position, Speed = speed });
                 enemy.AddComponent(new SpriteComponent { Texture = texture});
                 enemy.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(position.X, position.Y, texture.Bounds.Width, texture.Bounds.Height) });
                 return enemy;

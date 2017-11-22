@@ -35,6 +35,9 @@ namespace RogueSquad.Client.Dx
             Content.RootDirectory = "Content"; 
             //Window.AllowUserResizing = true;
            // IsMouseVisible = true;
+            
+            //TargetElapsedTime = TimeSpan.FromTicks(33333);
+            Engine.Instance.DesiredFPS = 60;
             IsFixedTimeStep = false;
             graphics.SynchronizeWithVerticalRetrace = false;
             graphics.PreferredBackBufferWidth = defaultBackBufferWidth;
@@ -42,8 +45,7 @@ namespace RogueSquad.Client.Dx
 
             Window.Position = new Point((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2) - (graphics.PreferredBackBufferWidth / 2), (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - (graphics.PreferredBackBufferHeight / 2));
 
-
-            TargetElapsedTime = TimeSpan.FromTicks(333333);
+            //TargetElapsedTime = TimeSpan.FromTicks(333333);
             screenFactory = new ScreenFactory();
             Services.AddService(typeof(IScreenFactory), screenFactory);
             screenManager = new ScreenManager(this);
@@ -56,7 +58,7 @@ namespace RogueSquad.Client.Dx
         {
             // Activate the first screens.
             screenManager.AddScreen(new BackgroundScreen(), null);
-
+            //screenManager.AddScreen(new GameplayScreen(), null);
             screenManager.AddScreen(new MainMenuScreen(), null);
 
         }
@@ -68,8 +70,7 @@ namespace RogueSquad.Client.Dx
             UserInterface.Initialize(Content, BuiltinThemes.hd);
             Engine.Instance.Init(screenManager.GraphicsDevice, this.Content);
             Engine.Instance.ScreenWidth = defaultBackBufferWidth;
-            Engine.Instance.ScreenHeight = defaultBackBufferHeight;
-
+            Engine.Instance.ScreenHeight = defaultBackBufferHeight;            
             //player.AddComponent(new BasicControllerComponent());
             base.Initialize();
         }

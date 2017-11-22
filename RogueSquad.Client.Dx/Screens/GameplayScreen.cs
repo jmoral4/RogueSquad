@@ -13,6 +13,8 @@ using GeonBit.UI.Entities;
 using QuakeConsole;
 using RogueSquad.Client.Dx.Screens;
 using RogueSquad.Core.Components.General;
+using System.Collections.Generic;
+using MonoGame.Extended.ViewportAdapters;
 
 #endregion
 
@@ -35,11 +37,17 @@ namespace RogueSquad.Client.Dx
         ConsoleComponent _console;
         World world;
         FramesPerSecondCounter fps;
-        TileRenderingSystem _trs;
  
         KeyboardState previousKeyboardState;
         KeyboardState currentKeyboardState;
         double _elapsed;
+
+
+
+        Camera2D _camera;
+        ViewportAdapter _viewportAdapter;
+
+
         #endregion
 
         #region Initialization
@@ -71,6 +79,9 @@ namespace RogueSquad.Client.Dx
                     Content = new ContentManager(ScreenManager.Game.Services, "Content");
 
                 _console = new ConsoleComponent(ScreenManager.Game);
+              
+
+
                 ScreenManager.Game.Components.Add(_console);
                 fps = new FramesPerSecondCounter();
                 // GeonBit.UI: Init the UI manager using the "hd" built-in theme
@@ -91,8 +102,8 @@ namespace RogueSquad.Client.Dx
 
         protected void LoadContent()
         {
-          
-           
+            _viewportAdapter = new BoxingViewportAdapter(ScreenManager.Game.Window, ScreenManager.GraphicsDevice, 1920, 1080);
+            _camera = new Camera2D(_viewportAdapter);
 
             // create a panel and position in center of screen
             Panel panel = new Panel(new Vector2(400, 400), PanelSkin.Default, Anchor.Center);
@@ -112,16 +123,25 @@ namespace RogueSquad.Client.Dx
             panel.AddChild(btn);
 
             world = new World(ScreenManager.GraphicsDevice, this.Content, Engine.Instance.ScreenWidth, Engine.Instance.ScreenHeight);
+            world.AttachCamera(_camera, _viewportAdapter);
             world.EnableBasicSystems();
             world.EnableDebugRendering();
             world.SetScene("Testbed");
 
+            var interpreter = new ManualInterpreter();
+            _console.Interpreter = interpreter;
+
+            interpreter.RegisterCommand("EnableDebug", (x) => { world.EnableDebugRendering(); });
+            interpreter.RegisterCommand("DisableDebug", (x) => { world.DisableDebugRendering(); });
+            interpreter.RegisterCommand("Exit", (x) => { ScreenManager.Game.Exit(); });
+            //_trs = new TileRenderingSystem(ScreenManager.SpriteBatch, Content.Load<Texture2D>("Assets/grass"), Content.Load<Texture2D>("Assets/stone_tile"), Content.Load<SpriteFont>("Fonts/gamefont"));
+            // _trs.CreateMap(10, 10);
 
 
-            _trs = new TileRenderingSystem(ScreenManager.SpriteBatch, Content.Load<Texture2D>("Assets/grass"), Content.Load<Texture2D>("Assets/stone_tile"), Content.Load<SpriteFont>("Fonts/gamefont"));
-            _trs.CreateMap(10, 10);
 
         }
+
+        
 
 
 
@@ -165,22 +185,9 @@ namespace RogueSquad.Client.Dx
 
             if (IsActive)
             {
-
-                _elapsed += gameTime.ElapsedGameTime.TotalMilliseconds;
                 fps.Update(gameTime);
                 // GeonBit.UIL update UI manager
-                UserInterface.Active.Update(gameTime);
-
-                if (_elapsed < 40 && !gameTime.IsRunningSlowly)
-                {
-                    return; //no update unless 40 milliseconds have passed;
-                }
-                else
-                {
-                    _elapsed = 0;
-                }
-
-
+                UserInterface.Active.Update(gameTime);                
                 world.Update(gameTime);
                 fps.Update(gameTime);
             }
@@ -230,7 +237,13 @@ namespace RogueSquad.Client.Dx
 #endif
 
                 if (previousKeyboardState.IsKeyUp(Keys.OemTilde) && currentKeyboardState.IsKeyDown(Keys.OemTilde))
+                {
                     _console.ToggleOpenClose();
+                    if (_console.IsAcceptingInput)
+                        world.Pause();
+                    else
+                        world.UnPause();
+                }
 
                 previousKeyboardState = currentKeyboardState;
             }
@@ -252,11 +265,12 @@ namespace RogueSquad.Client.Dx
             // Our player and enemy are both actually just text strings.
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
-           // spriteBatch.Begin();
+            // spriteBatch.Begin();
 
-           // ScreenManager.Game.Window.Title = "Fps:" + fps.FramesPerSecond + " Entities: " + world.EntityCount;
-           // fps.Draw(gameTime);            
-             _trs.Draw(gameTime);
+            // ScreenManager.Game.Window.Title = "Fps:" + fps.FramesPerSecond + " Entities: " + world.EntityCount;
+            // fps.Draw(gameTime);            
+            //_trs.Draw(gameTime);
+          
              world.Draw(gameTime);
 
 

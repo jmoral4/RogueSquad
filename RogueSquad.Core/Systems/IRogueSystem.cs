@@ -13,6 +13,8 @@ namespace RogueSquad.Core.Systems
         void Update(GameTime gametime);
        
         void AddEntity(RogueEntity entity);
+
+        bool HasEntity(RogueEntity entity);
 //        void RemoveEntity(RogueEntity entity);
         ComponentTypes[] RequiredComponents { get; set; }
     }

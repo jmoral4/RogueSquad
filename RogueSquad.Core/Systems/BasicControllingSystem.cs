@@ -24,6 +24,16 @@ namespace RogueSquad.Core.Systems
             _controllerNodes.Add(new ControllerNode { Position = position, Controller = controller, Id = entity.ID });            
         }
 
+        public bool HasEntity(RogueEntity entity)
+        {
+            foreach (var node in _controllerNodes)
+            {
+                if (node.Id == entity.ID)
+                    return true;
+            }
+            return false;
+        }
+
         public void Update(GameTime gameTime)
         {
             var kb = Keyboard.GetState();
@@ -44,10 +54,13 @@ namespace RogueSquad.Core.Systems
                 controllerNode.Controller.KeyLeft = true;
             if (kb.IsKeyDown(Keys.D))
                 controllerNode.Controller.KeyRight = true;
-            if (kb.IsKeyDown(Keys.Space))
-                controllerNode.Controller.KeyCreateRandomEntities = true;
+            if (kb.IsKeyDown(Keys.F1))
+                controllerNode.Controller.KeyCreateRandomEntities = true;            
 
-            controllerNode.Controller.AnyKeyPressed = controllerNode.Controller.KeyUp || controllerNode.Controller.KeyDown || controllerNode.Controller.KeyLeft || controllerNode.Controller.KeyRight || controllerNode.Controller.KeyRetreat || controllerNode.Controller.KeyCreateRandomEntities;
+            if (kb.IsKeyDown(Keys.Space))
+                controllerNode.Controller.KeyFire = true;
+
+            controllerNode.Controller.AnyKeyPressed = controllerNode.Controller.KeyUp || controllerNode.Controller.KeyDown || controllerNode.Controller.KeyLeft || controllerNode.Controller.KeyRight || controllerNode.Controller.KeyRetreat || controllerNode.Controller.KeyCreateRandomEntities || controllerNode.Controller.KeyFire;
         }
 
         private void Reset(ControllerNode controllerNode)
@@ -57,6 +70,7 @@ namespace RogueSquad.Core.Systems
             controllerNode.Controller.KeyLeft = false;
             controllerNode.Controller.KeyRight = false;
             controllerNode.Controller.KeyRetreat = false;
+            controllerNode.Controller.KeyFire = false;
             controllerNode.Controller.KeyCreateRandomEntities = false;
             controllerNode.Controller.AnyKeyPressed = false;
         }

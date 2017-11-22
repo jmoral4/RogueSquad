@@ -9,6 +9,7 @@ namespace RogueSquad.Core.Nodes
         public SpriteComponent Renderable { get; set; }
         public PositionComponent Position { get; set; }
         public CollidableComponent Collision { get; set; }
+        public AIComponent AIData { get; set; }
 
 
     }

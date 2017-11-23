@@ -29,8 +29,14 @@ namespace RogueSquad.Client.Dx
         ScreenManager screenManager;
         ScreenFactory screenFactory;
 
+
         public Game1() : base()
         {
+            Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            //DateTime buildDate = new DateTime(2000, 1, 1)
+            //                        .AddDays(version.Build).AddSeconds(version.Revision * 2);
+            Engine.Instance.VersionString = $"{version}";
+
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content"; 
             //Window.AllowUserResizing = true;
@@ -51,7 +57,9 @@ namespace RogueSquad.Client.Dx
             screenManager = new ScreenManager(this);
             Components.Add(screenManager);
             AddInitialScreens();
+
             
+
         }
 
         private void AddInitialScreens()
@@ -93,7 +101,7 @@ namespace RogueSquad.Client.Dx
 
         protected override void Draw(GameTime gameTime)
         {
-            //graphics.GraphicsDevice.Clear(Color.Black);
+            //graphics.GraphicsDevice.Clear(Color.Black);            
             base.Draw(gameTime);
         }
     }

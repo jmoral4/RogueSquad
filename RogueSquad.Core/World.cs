@@ -77,19 +77,38 @@ namespace RogueSquad.Core
 
             AddEntity(player);
 
+            var ally = CreateAlly(new Vector2(900, 400), startLocation + new Vector2(-20, -20), new Vector2(-100, -100));
+            AddEntity(ally);
+            var ally2 = CreateAlly(new Vector2(800, 600), startLocation + new Vector2(-20, 20), new Vector2(-100, 100));
+            AddEntity(ally2);
+            //add two allies..
+            
+
             AddRandomEnemies(worldWidth, worldHeight);
 
-           
+
         }
 
+        private RogueEntity CreateAlly(Vector2 location, Vector2 followLocation, Vector2 followDistance)
+        {
+            RogueEntity ally = RogueEntity.CreateNew();
+            var playerTex = Content.Load<Texture2D>("Assets/Walking_sm");
+            ally.AddComponent(new PositionComponent { Position = location, Speed = .25f });
+            ally.AddComponent(new SpriteComponent { Texture = playerTex, Size = new Point(64, 96) });
+            ally.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(location.X, location.Y, 64, 96) });            
+            ally.AddComponent(new AIComponent { IsPlayer = false, IsAlly = true, Faction = "Player" , FollowTarget = new RectangleF(followLocation.X, followLocation.Y, 62, 96), FollowDistance = followDistance });
 
+            return ally;
+        }
 
-        public void AddRandomEnemies(int worldWidth, int worldHeight)
+        public bool IsPaused => _isPaused;
+
+        public void AddRandomEnemies(int worldWidth, int worldHeight, int count = 20)
         {
             EntityGenerator eg = new EntityGenerator(Content);
             Random r = new Random();
            
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < count; i++)
             {
                 var pos = new Vector2(r.Next(0, (64 * worldWidth) - 20), r.Next(0, (worldHeight * 32) - 20));
                 var enemy = eg.CreateOnScreenEntity("basic_enemy", pos, r.Next(1,10) / 100);

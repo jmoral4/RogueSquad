@@ -67,7 +67,7 @@ namespace RogueSquad.Core.Systems
 
         public void Update(GameTime gameTime) {
             _camera.LookAt(_playerNodeRef.Position.Position);
-            _camera.Zoom = 1.0f;
+           // _camera.Zoom = 1.0f;
         }
     }
 

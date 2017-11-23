@@ -49,7 +49,7 @@ namespace RogueSquad.Client.Dx.Screens
             {
                     content = new ContentManager(ScreenManager.Game.Services, "Content");
 
-                backgroundTexture = content.Load<Texture2D>("UI/background");
+                backgroundTexture = content.Load<Texture2D>("UI/bg2");
             }
         }
 

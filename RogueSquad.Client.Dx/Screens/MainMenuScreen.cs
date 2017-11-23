@@ -2,6 +2,7 @@
 #region Using Statements
 using Microsoft.Xna.Framework;
 using RogueSquad.Client.Dx;
+using RogueSquad.Core;
 #endregion
 
 namespace RogueSquad.Client.Dx.Screens
@@ -18,21 +19,32 @@ namespace RogueSquad.Client.Dx.Screens
         /// Constructor fills in the menu contents.
         /// </summary>
         public MainMenuScreen()
-            : base("Main Menu")
+            : base("Rogue Squad \nBuild: " + Engine.Instance.VersionString)
         {
             // Create our menu entries.
             MenuEntry playGameMenuEntry = new MenuEntry("Play Game");
             MenuEntry optionsMenuEntry = new MenuEntry("Test Options");
-            MenuEntry exitMenuEntry = new MenuEntry("Exit");
+            MenuEntry setpieceEditorMenuEntry = new MenuEntry("Setpiece Editor");
+            MenuEntry npcEditorMenuEntry = new MenuEntry("NPC Editor");
+            MenuEntry objectEditorMenuEntry = new MenuEntry("Object Editor");
+            MenuEntry exitMenuEntry = new MenuEntry("Exit");                        
+            
+
 
             // Hook up menu event handlers.
             playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
             optionsMenuEntry.Selected += OptionsMenuEntrySelected;
+            //setpieceEditorMenuEntry.Selected += SetpieceEditorMenuEntrySelected;
+           // npcEditorMenuEntry.Selected += NpcEditorMenuEntrySelected;
+            //objectEditorMenuEntry.Selected += ObjectEditorMenuEntrySelected;
             exitMenuEntry.Selected += OnCancel;
 
             // Add entries to the menu.
             MenuEntries.Add(playGameMenuEntry);
             MenuEntries.Add(optionsMenuEntry);
+            MenuEntries.Add(setpieceEditorMenuEntry);
+            MenuEntries.Add(npcEditorMenuEntry);
+            MenuEntries.Add(objectEditorMenuEntry);
             MenuEntries.Add(exitMenuEntry);
         }
 
@@ -51,6 +63,32 @@ namespace RogueSquad.Client.Dx.Screens
                                new GameplayScreen());
         }
 
+        /// <summary>
+        /// Event handler for when the Play Game menu entry is selected.
+        /// </summary>
+        void SetpieceEditorMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex,
+                               new GameplayScreen());
+        }
+
+        /// <summary>
+        /// Event handler for when the Play Game menu entry is selected.
+        /// </summary>
+        void NpcEditorMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex,
+                               new GameplayScreen());
+        }
+
+        /// <summary>
+        /// Event handler for when the Play Game menu entry is selected.
+        /// </summary>
+        void ObjectEditorMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex,
+                               new GameplayScreen());
+        }
 
         /// <summary>
         /// Event handler for when the Options menu entry is selected.

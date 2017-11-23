@@ -8,6 +8,8 @@ namespace RogueSquad.Core.Components
         public Texture2D Texture { get; set; }
         public Point Size { get; set; }
 
+        public Rectangle Source { get; set; }
+
     }
 
   

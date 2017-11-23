@@ -22,6 +22,7 @@ namespace RogueSquad.Core.Components
 
         public bool KeyRetreat { get; set; }
         public bool KeyFire { get; set; }
+        public bool KeyTarget { get; set; }
         public bool KeyLeft { get; set; }
         public bool KeyRight { get; set; }
         public bool KeyUp{ get; set; }

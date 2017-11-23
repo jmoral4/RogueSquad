@@ -40,6 +40,8 @@ namespace RogueSquad.Client.Dx
  
         KeyboardState previousKeyboardState;
         KeyboardState currentKeyboardState;
+        MouseState previousMouseState;
+        MouseState currentMouseState;
         double _elapsed;
 
 
@@ -123,6 +125,7 @@ namespace RogueSquad.Client.Dx
             panel.AddChild(btn);
 
             world = new World(ScreenManager.GraphicsDevice, this.Content, Engine.Instance.ScreenWidth, Engine.Instance.ScreenHeight);
+            _camera.Zoom = 1.0f;
             world.AttachCamera(_camera, _viewportAdapter);
             world.EnableBasicSystems();
             world.EnableDebugRendering();
@@ -189,7 +192,7 @@ namespace RogueSquad.Client.Dx
                 // GeonBit.UIL update UI manager
                 UserInterface.Active.Update(gameTime);                
                 world.Update(gameTime);
-                fps.Update(gameTime);
+
             }
 
             
@@ -243,6 +246,18 @@ namespace RogueSquad.Client.Dx
                         world.Pause();
                     else
                         world.UnPause();
+                }
+
+                if (!world.IsPaused)
+                {
+                    if (previousKeyboardState.IsKeyUp(Keys.OemPlus) && currentKeyboardState.IsKeyDown(Keys.OemPlus))
+                    {
+                        _camera.ZoomIn(.1f);
+                    }
+                    if (previousKeyboardState.IsKeyUp(Keys.OemMinus) && currentKeyboardState.IsKeyDown(Keys.OemMinus))
+                    {
+                        _camera.ZoomOut(.1f);
+                    }
                 }
 
                 previousKeyboardState = currentKeyboardState;

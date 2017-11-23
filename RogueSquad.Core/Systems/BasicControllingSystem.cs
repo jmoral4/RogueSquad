@@ -55,12 +55,15 @@ namespace RogueSquad.Core.Systems
             if (kb.IsKeyDown(Keys.D))
                 controllerNode.Controller.KeyRight = true;
             if (kb.IsKeyDown(Keys.F1))
-                controllerNode.Controller.KeyCreateRandomEntities = true;            
+                controllerNode.Controller.KeyCreateRandomEntities = true;
 
-            if (kb.IsKeyDown(Keys.Space))
+            if (kb.IsKeyDown(Keys.Q))
+                controllerNode.Controller.KeyTarget = true;
+
+            if (kb.IsKeyDown(Keys.Space) || kb.IsKeyDown(Keys.E))
                 controllerNode.Controller.KeyFire = true;
 
-            controllerNode.Controller.AnyKeyPressed = controllerNode.Controller.KeyUp || controllerNode.Controller.KeyDown || controllerNode.Controller.KeyLeft || controllerNode.Controller.KeyRight || controllerNode.Controller.KeyRetreat || controllerNode.Controller.KeyCreateRandomEntities || controllerNode.Controller.KeyFire;
+            controllerNode.Controller.AnyKeyPressed = controllerNode.Controller.KeyUp || controllerNode.Controller.KeyDown || controllerNode.Controller.KeyLeft || controllerNode.Controller.KeyRight || controllerNode.Controller.KeyRetreat || controllerNode.Controller.KeyCreateRandomEntities || controllerNode.Controller.KeyFire || controllerNode.Controller.KeyTarget;
         }
 
         private void Reset(ControllerNode controllerNode)
@@ -70,6 +73,7 @@ namespace RogueSquad.Core.Systems
             controllerNode.Controller.KeyLeft = false;
             controllerNode.Controller.KeyRight = false;
             controllerNode.Controller.KeyRetreat = false;
+            controllerNode.Controller.KeyTarget = false;
             controllerNode.Controller.KeyFire = false;
             controllerNode.Controller.KeyCreateRandomEntities = false;
             controllerNode.Controller.AnyKeyPressed = false;

@@ -17,10 +17,19 @@ namespace RogueSquad.Core.Components
         public bool IsAttacking { get; set; }
         public RectangleF DetectionRadius { get; set; }
         public bool IsPlayer { get; set; }
+        public bool IsAlly { get; set; }
+        public string Faction { get; set; }
+        public bool IsSameFaction(string s)
+        {
+            return s == Faction;
+        }
         public bool HasPatrolArea { get; set; }
 
         public RectangleF PatrolArea { get; set; }
 
+        public RectangleF FollowFrame { get; set; }
+        public RectangleF FollowTarget { get; set; }
+        public Vector2 FollowDistance { get; set; }
         
 
     }

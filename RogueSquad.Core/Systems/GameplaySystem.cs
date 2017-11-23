@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using RogueSquad.Core.Components;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 
 namespace RogueSquad.Core.Systems
 {
@@ -64,7 +65,7 @@ namespace RogueSquad.Core.Systems
             return false;
         }
 
-        float aiSpeed = .20f; //move to position
+        float aiSpeed = .14f; //move to position
         public void Update(GameTime gametime)
         {
 
@@ -90,29 +91,100 @@ namespace RogueSquad.Core.Systems
                     if (_player.PositionData.Position.X > gamePlayNode.PositionData.Position.X)
                     {
                         //move player 
-                        newPos.X += .14f * gametime.ElapsedGameTime.Milliseconds;
+                        newPos.X += aiSpeed * gametime.ElapsedGameTime.Milliseconds;
                     }
                     if (_player.PositionData.Position.X < gamePlayNode.PositionData.Position.X)
                     {
                         //move player 
-                        newPos.X -= .14f * gametime.ElapsedGameTime.Milliseconds;
+                        newPos.X -= aiSpeed * gametime.ElapsedGameTime.Milliseconds;
                     }
                     if (_player.PositionData.Position.Y > gamePlayNode.PositionData.Position.Y)
                     {
                         //move player 
-                        newPos.Y += .14f * gametime.ElapsedGameTime.Milliseconds;
+                        newPos.Y += aiSpeed * gametime.ElapsedGameTime.Milliseconds;
                     }
                     if (_player.PositionData.Position.Y < gamePlayNode.PositionData.Position.Y)
                     {
                         //move player 
-                        newPos.Y -= .14f * gametime.ElapsedGameTime.Milliseconds;
+                        newPos.Y -= aiSpeed * gametime.ElapsedGameTime.Milliseconds;
                     }
 
                     gamePlayNode.PositionData.Position = newPos;
                 }
+
+                //move allies towards player if needed
+                if (gamePlayNode.AIData.IsAlly)
+                {
+                    //update follow target to match player location
+                    var newLocation = _player.PositionData.Position + gamePlayNode.AIData.FollowDistance;
+                    gamePlayNode.AIData.FollowTarget = new RectangleF(newLocation.X, newLocation.Y, 2,2);
+
+                    //if we're outside of our follow distance
+                    if (!gamePlayNode.AIData.FollowTarget.Intersects(gamePlayNode.CollisionData.BoundingRectangle))
+                    {
+                        MoveTowardsTarget(gamePlayNode, gamePlayNode.AIData.FollowTarget, gametime);
+
+                    }
+
+                }
             }           
             
 
+
+        }
+
+        private void MoveTowardsTarget(GameplayNode gamePlayNode, RectangleF target, GameTime gametime)
+        {
+            Vector2 newPos = gamePlayNode.PositionData.Position;
+            if (target.Position.X > gamePlayNode.PositionData.Position.X)
+            {
+                //move player 
+                newPos.X += aiSpeed * gametime.ElapsedGameTime.Milliseconds;
+            }
+            if (target.Position.X < gamePlayNode.PositionData.Position.X)
+            {
+                //move player 
+                newPos.X -= aiSpeed * gametime.ElapsedGameTime.Milliseconds;
+            }
+            if (target.Position.Y > gamePlayNode.PositionData.Position.Y)
+            {
+                //move player 
+                newPos.Y += aiSpeed * gametime.ElapsedGameTime.Milliseconds;
+            }
+            if (target.Position.Y < gamePlayNode.PositionData.Position.Y)
+            {
+                //move player 
+                newPos.Y -= aiSpeed * gametime.ElapsedGameTime.Milliseconds;
+            }
+
+            gamePlayNode.PositionData.Position = newPos;
+        }
+
+        private void MoveTowardsPlayer(GameplayNode gamePlayNode, GameTime gametime)
+        {
+            Vector2 newPos = gamePlayNode.PositionData.Position;
+            if (_player.PositionData.Position.X > gamePlayNode.PositionData.Position.X)
+            {
+                //move player 
+                newPos.X += aiSpeed * gametime.ElapsedGameTime.Milliseconds;
+            }
+            if (_player.PositionData.Position.X < gamePlayNode.PositionData.Position.X)
+            {
+                //move player 
+                newPos.X -= aiSpeed * gametime.ElapsedGameTime.Milliseconds;
+            }
+            if (_player.PositionData.Position.Y > gamePlayNode.PositionData.Position.Y)
+            {
+                //move player 
+                newPos.Y += aiSpeed * gametime.ElapsedGameTime.Milliseconds;
+            }
+            if (_player.PositionData.Position.Y < gamePlayNode.PositionData.Position.Y)
+            {
+                //move player 
+                newPos.Y -= aiSpeed * gametime.ElapsedGameTime.Milliseconds;
+            }
+
+            gamePlayNode.PositionData.Position = newPos;
 
         }
 
@@ -151,6 +223,13 @@ namespace RogueSquad.Core.Systems
                 {
                     _worldRef.AddRandomEnemies(100,100);
                 }
+
+                if (controller.KeyTarget)
+                {
+                    //let's select a target 
+
+                }
+
 
                 positionData.Position = newPos;
             }

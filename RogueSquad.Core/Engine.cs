@@ -37,6 +37,8 @@ namespace RogueSquad.Core
         int _lastFreeEntity;
         BitArray _liveEntities;
 
+        public string VersionString { get; set; }
+
         public int ScreenWidth { get; set; }
         public int ScreenHeight { get; set; }
         public int DesiredFPS { get; set; }

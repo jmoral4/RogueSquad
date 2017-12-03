@@ -17,7 +17,7 @@ namespace RogueSquad.Client.Dx
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class RogueSquadGame : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -30,7 +30,7 @@ namespace RogueSquad.Client.Dx
         ScreenFactory screenFactory;
 
 
-        public Game1() : base()
+        public RogueSquadGame() : base()
         {
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             //DateTime buildDate = new DateTime(2000, 1, 1)
@@ -54,6 +54,7 @@ namespace RogueSquad.Client.Dx
             //TargetElapsedTime = TimeSpan.FromTicks(333333);
             screenFactory = new ScreenFactory();
             Services.AddService(typeof(IScreenFactory), screenFactory);
+            
             screenManager = new ScreenManager(this);
             Components.Add(screenManager);
             AddInitialScreens();
@@ -92,9 +93,10 @@ namespace RogueSquad.Client.Dx
         protected override void UnloadContent()
         {
         }
-        
+
         protected override void Update(GameTime gameTime)
-        {
+        {         
+           
             //USE WITH CAUTION -- overrides all screen managers stuff -- might be useful for global key captures (printscreen?/voip) or cheat codes
             base.Update(gameTime);
         }

@@ -3,6 +3,7 @@
 using Microsoft.Xna.Framework;
 using RogueSquad.Client.Dx;
 using RogueSquad.Core;
+using RogueSquad.Core.Settings;
 #endregion
 
 namespace RogueSquad.Client.Dx.Screens
@@ -26,7 +27,7 @@ namespace RogueSquad.Client.Dx.Screens
             MenuEntry optionsMenuEntry = new MenuEntry("Test Options");
             MenuEntry setpieceEditorMenuEntry = new MenuEntry("Setpiece Editor");
             MenuEntry npcEditorMenuEntry = new MenuEntry("NPC Editor");
-            MenuEntry objectEditorMenuEntry = new MenuEntry("Object Editor");
+            MenuEntry objectEditorMenuEntry = new MenuEntry("Object Editor");            
             MenuEntry exitMenuEntry = new MenuEntry("Exit");                        
             
 
@@ -35,8 +36,8 @@ namespace RogueSquad.Client.Dx.Screens
             playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
             optionsMenuEntry.Selected += OptionsMenuEntrySelected;
             //setpieceEditorMenuEntry.Selected += SetpieceEditorMenuEntrySelected;
-           // npcEditorMenuEntry.Selected += NpcEditorMenuEntrySelected;
-            //objectEditorMenuEntry.Selected += ObjectEditorMenuEntrySelected;
+             npcEditorMenuEntry.Selected += NpcEditorMenuEntrySelected;
+            //objectEditorMenuEntry.Selected += ObjectEditorMenuEntrySelected;            
             exitMenuEntry.Selected += OnCancel;
 
             // Add entries to the menu.
@@ -44,7 +45,7 @@ namespace RogueSquad.Client.Dx.Screens
             MenuEntries.Add(optionsMenuEntry);
             MenuEntries.Add(setpieceEditorMenuEntry);
             MenuEntries.Add(npcEditorMenuEntry);
-            MenuEntries.Add(objectEditorMenuEntry);
+            MenuEntries.Add(objectEditorMenuEntry);            
             MenuEntries.Add(exitMenuEntry);
         }
 
@@ -62,6 +63,9 @@ namespace RogueSquad.Client.Dx.Screens
             LoadingScreen.Load(ScreenManager, true, e.PlayerIndex,
                                new GameplayScreen());
         }
+
+
+ 
 
         /// <summary>
         /// Event handler for when the Play Game menu entry is selected.

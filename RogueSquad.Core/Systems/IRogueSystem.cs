@@ -15,8 +15,12 @@ namespace RogueSquad.Core.Systems
         void AddEntity(RogueEntity entity);
 
         bool HasEntity(RogueEntity entity);
-//        void RemoveEntity(RogueEntity entity);
-        ComponentTypes[] RequiredComponents { get; set; }
+        //        void RemoveEntity(RogueEntity entity);
+        IEnumerable<ComponentTypes> Required { get; set; }
+
     }
+
+    
+
 
 }

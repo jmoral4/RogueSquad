@@ -8,6 +8,7 @@ namespace RogueSquad.Core.Components
         public Keys Key { get; set; }
         public Action OnKeyPress { get; set; }
     }
+    
 
     public class BasicControllerComponent : IRogueComponent
     {
@@ -16,9 +17,7 @@ namespace RogueSquad.Core.Components
         public BasicControllerComponent(KeyMapping[] keymapping = null)
         {
             _keyMapping = keymapping;
-        }
-
-
+        }                
 
         public bool KeyRetreat { get; set; }
         public bool KeyFire { get; set; }
@@ -27,6 +26,7 @@ namespace RogueSquad.Core.Components
         public bool KeyRight { get; set; }
         public bool KeyUp{ get; set; }
         public bool KeyDown { get; set; }
+        public bool KeyEnableDebug { get; set; }
         public bool AnyKeyPressed { get; set; }
         public bool KeyCreateRandomEntities { get; set; }
         public ComponentTypes ComponentType { get; set; } = ComponentTypes.BasicControllerComponent;

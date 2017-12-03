@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using RogueSquad.Core.Components;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using RogueSquad.Core.Nodes;
 
 namespace RogueSquad.Core.Systems
 {
@@ -17,13 +18,15 @@ namespace RogueSquad.Core.Systems
         public BasicControllerComponent ControllerData { get; set; }
         public AIComponent AIData { get; set; }
         public CollidableComponent CollisionData { get; set; }
+        public AnimationStateInfoComponent PlayerStateData { get; set; }
         public bool IsPlayer { get; set; }
         
         
-    }
+    }    
+
     public class GameplaySystem : IRogueSystem
     {
-        public ComponentTypes[] RequiredComponents { get; set; } = new ComponentTypes[] { }; // we get every component
+        public IEnumerable<ComponentTypes> Required { get; set; } = Enumerable.Empty<ComponentTypes>();
 
         List<GameplayNode> _nodes = new List<GameplayNode>();
         World _worldRef;
@@ -40,13 +43,15 @@ namespace RogueSquad.Core.Systems
             var position = entity.GetComponentByType(ComponentTypes.PositionComponent) as PositionComponent;
             var ai = entity.GetComponentByType(ComponentTypes.AIComponent) as AIComponent;
             var collisionData = entity.GetComponentByType(ComponentTypes.CollidableComponent) as CollidableComponent;
+            var playerState = entity.GetComponentByType(ComponentTypes.AnimationStateInfoComponent) as AnimationStateInfoComponent;
 
-            var gameplayNode = new GameplayNode { PositionData = position, ControllerData = controller, Id = entity.ID, AIData = ai, CollisionData = collisionData, IsPlayer = false };
+            var gameplayNode = new GameplayNode { PositionData = position, ControllerData = controller, Id = entity.ID, AIData = ai, CollisionData = collisionData, IsPlayer = false , PlayerStateData = playerState };
 
             if (controller != null)
             {
                 //this is a player node
                 _player = gameplayNode;
+                _player.IsPlayer = true;
 
             }
             else {
@@ -69,127 +74,27 @@ namespace RogueSquad.Core.Systems
         public void Update(GameTime gametime)
         {
 
-            HandleInput(_player.ControllerData, _player.PositionData, gametime);
+            HandleInput(_player.ControllerData, _player.PositionData, _player.PlayerStateData, gametime);
 
             //check if player is in an AI trigger boundary
             foreach (var gamePlayNode in _nodes)
             {
-                if (_player.CollisionData.BoundingRectangle.Intersects(gamePlayNode.AIData.DetectionRadius))
-                {
-                    gamePlayNode.AIData.DetectedPlayer = true;
-                }
-                else
-                {
-                    gamePlayNode.AIData.DetectedPlayer = false;
-                }
+                //run gameplay checks based on final AI state
 
-
-                //chase player if detected
-                if (gamePlayNode.AIData.DetectedPlayer)
-                {
-                    Vector2 newPos = gamePlayNode.PositionData.Position;
-                    if (_player.PositionData.Position.X > gamePlayNode.PositionData.Position.X)
-                    {
-                        //move player 
-                        newPos.X += aiSpeed * gametime.ElapsedGameTime.Milliseconds;
-                    }
-                    if (_player.PositionData.Position.X < gamePlayNode.PositionData.Position.X)
-                    {
-                        //move player 
-                        newPos.X -= aiSpeed * gametime.ElapsedGameTime.Milliseconds;
-                    }
-                    if (_player.PositionData.Position.Y > gamePlayNode.PositionData.Position.Y)
-                    {
-                        //move player 
-                        newPos.Y += aiSpeed * gametime.ElapsedGameTime.Milliseconds;
-                    }
-                    if (_player.PositionData.Position.Y < gamePlayNode.PositionData.Position.Y)
-                    {
-                        //move player 
-                        newPos.Y -= aiSpeed * gametime.ElapsedGameTime.Milliseconds;
-                    }
-
-                    gamePlayNode.PositionData.Position = newPos;
-                }
-
-                //move allies towards player if needed
-                if (gamePlayNode.AIData.IsAlly)
-                {
-                    //update follow target to match player location
-                    var newLocation = _player.PositionData.Position + gamePlayNode.AIData.FollowDistance;
-                    gamePlayNode.AIData.FollowTarget = new RectangleF(newLocation.X, newLocation.Y, 2,2);
-
-                    //if we're outside of our follow distance
-                    if (!gamePlayNode.AIData.FollowTarget.Intersects(gamePlayNode.CollisionData.BoundingRectangle))
-                    {
-                        MoveTowardsTarget(gamePlayNode, gamePlayNode.AIData.FollowTarget, gametime);
-
-                    }
-
-                }
-            }           
-            
-
+            }                       
 
         }
 
-        private void MoveTowardsTarget(GameplayNode gamePlayNode, RectangleF target, GameTime gametime)
+
+        /// <summary>
+        /// This method takes gameplay action on the controller commands which have been translated from their input devices (gamepad or keyboard)
+        /// </summary>
+        /// <param name="controller">Translated Controller Commands</param>
+        /// <param name="positionData">Positional Data</param>
+        /// <param name="gameTime">Elapsed Game Time</param>
+        private void HandleInput(BasicControllerComponent controller, PositionComponent positionData, AnimationStateInfoComponent playerState, GameTime gameTime)
         {
-            Vector2 newPos = gamePlayNode.PositionData.Position;
-            if (target.Position.X > gamePlayNode.PositionData.Position.X)
-            {
-                //move player 
-                newPos.X += aiSpeed * gametime.ElapsedGameTime.Milliseconds;
-            }
-            if (target.Position.X < gamePlayNode.PositionData.Position.X)
-            {
-                //move player 
-                newPos.X -= aiSpeed * gametime.ElapsedGameTime.Milliseconds;
-            }
-            if (target.Position.Y > gamePlayNode.PositionData.Position.Y)
-            {
-                //move player 
-                newPos.Y += aiSpeed * gametime.ElapsedGameTime.Milliseconds;
-            }
-            if (target.Position.Y < gamePlayNode.PositionData.Position.Y)
-            {
-                //move player 
-                newPos.Y -= aiSpeed * gametime.ElapsedGameTime.Milliseconds;
-            }
-
-            gamePlayNode.PositionData.Position = newPos;
-        }
-
-        private void MoveTowardsPlayer(GameplayNode gamePlayNode, GameTime gametime)
-        {
-            Vector2 newPos = gamePlayNode.PositionData.Position;
-            if (_player.PositionData.Position.X > gamePlayNode.PositionData.Position.X)
-            {
-                //move player 
-                newPos.X += aiSpeed * gametime.ElapsedGameTime.Milliseconds;
-            }
-            if (_player.PositionData.Position.X < gamePlayNode.PositionData.Position.X)
-            {
-                //move player 
-                newPos.X -= aiSpeed * gametime.ElapsedGameTime.Milliseconds;
-            }
-            if (_player.PositionData.Position.Y > gamePlayNode.PositionData.Position.Y)
-            {
-                //move player 
-                newPos.Y += aiSpeed * gametime.ElapsedGameTime.Milliseconds;
-            }
-            if (_player.PositionData.Position.Y < gamePlayNode.PositionData.Position.Y)
-            {
-                //move player 
-                newPos.Y -= aiSpeed * gametime.ElapsedGameTime.Milliseconds;
-            }
-
-            gamePlayNode.PositionData.Position = newPos;
-
-        }
-
-        private void HandleInput(BasicControllerComponent controller, PositionComponent positionData, GameTime gameTime)
-        {
+            // this should be the central place where all input from the controller is handled as long as the game is running (not in a menu)
             if (controller.AnyKeyPressed)
             {
                 Vector2 newPos = positionData.Position;
@@ -202,26 +107,37 @@ namespace RogueSquad.Core.Systems
                 if (controller.KeyLeft)
                 {
                     newPos.X -= positionData.Speed * gameTime.ElapsedGameTime.Milliseconds;
-
+                    playerState.Facing = CharacterFacing.WEST;
+                    playerState.IsMoving = true;
+                    playerState.CurrentAnimationName = "left";
+                    //also we update our players directional info
                 }
                 if (controller.KeyRight)
                 {
                     newPos.X += positionData.Speed * gameTime.ElapsedGameTime.Milliseconds;
-
+                    playerState.Facing = CharacterFacing.EAST;
+                    playerState.IsMoving = true;
+                    playerState.CurrentAnimationName = "right";
                 }
                 if (controller.KeyUp)
                 {
                     newPos.Y -= positionData.Speed * gameTime.ElapsedGameTime.Milliseconds;
+                    playerState.Facing = CharacterFacing.NORTH;
+                    playerState.IsMoving = true;
+                    playerState.CurrentAnimationName = "up";
 
                 }
                 if (controller.KeyDown)
                 {
                     newPos.Y += positionData.Speed * gameTime.ElapsedGameTime.Milliseconds;
+                    playerState.Facing = CharacterFacing.SOUTH;
+                    playerState.IsMoving = true;
+                    playerState.CurrentAnimationName = "down";
                 }
 
                 if (controller.KeyCreateRandomEntities)
                 {
-                    _worldRef.AddRandomEnemies(100,100);
+                    _worldRef.AddRandomEnemies(100, 100);
                 }
 
                 if (controller.KeyTarget)
@@ -230,8 +146,29 @@ namespace RogueSquad.Core.Systems
 
                 }
 
+                if (controller.KeyEnableDebug)
+                {
+                    if (_worldRef.IsDebugEnabled)
+                        _worldRef.DisableDebugRendering();
+                    else
+                        _worldRef.EnableDebugRendering();
+                }
 
                 positionData.Position = newPos;
+            }
+            else
+            {
+                //select the correct idle direction
+                string anim = "idle_down";
+                switch (playerState.Facing)
+                {
+                    case CharacterFacing.EAST: anim="idle_right";break;
+                    case CharacterFacing.WEST: anim = "idle_left"; break;
+                    case CharacterFacing.SOUTH: anim = "idle_down"; break;
+                    case CharacterFacing.NORTH: anim = "idle_up"; break;
+                }
+                playerState.CurrentAnimationName = anim;
+                playerState.IsMoving = false;                
             }
         }
     }

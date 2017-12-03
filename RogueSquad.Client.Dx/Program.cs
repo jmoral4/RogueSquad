@@ -14,7 +14,7 @@ namespace RogueSquad.Client.Dx
         [STAThread]
         static void Main()
         {
-            using (var game = new Game1())
+            using (var game = new RogueSquadGame())
                 game.Run();
         }
     }

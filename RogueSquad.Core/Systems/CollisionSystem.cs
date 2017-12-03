@@ -10,9 +10,25 @@ using MonoGame.Extended;
 
 namespace RogueSquad.Core.Systems
 {
+    // we seperate out the world into a grid of 64x64 (or other arbitrary size)
+    // all game objects for the level are initially put into relevant grid cells (debug draw the grid cells ) (grid cells store a count of objects within for speed)            
+    // entities are placed into their appropriate cell on every update 
+        // we use entity position to determine if the entity can even be seen, if not, it's not updated
+    // we select only the grid cells which can be seen on the screen
+    // we iterate through each cell and only grab the ones which have 2 or move objects within (no possibility of collision otherwise)
+    // for each match we perform simple AABB or other collision as needed.
+
+    // all objects are checked for collisions within their cell 
+    // objects can (and will) be a part of multiple grid cells 
+    // collisions generate a CollisionEvent which contains the two objects which hit, the speed of each, whether the entity is real or virtual 
+    // other systems can then evaluate the collision list of any entity collidableComponent which has 'hadCollisions = true'
+
+
     public class CollisionSystem : IRogueSystem
     {
-        public ComponentTypes[] RequiredComponents { get; set; } = new ComponentTypes[] { ComponentTypes.CollidableComponent };
+        public IEnumerable<ComponentTypes> Required { get; set; } = new ComponentTypes[] { ComponentTypes.CollidableComponent };
+
+
         private IList<CollisionNode> _collisionNodes = new List<CollisionNode>();
 
         public void AddEntity(RogueEntity entity)

@@ -1,6 +1,8 @@
 
 #region Using Statements
 using Microsoft.Xna.Framework;
+using RogueSquad.Core;
+using RogueSquad.Core.Settings;
 #endregion
 
 namespace RogueSquad.Client.Dx.Screens
@@ -38,7 +40,8 @@ namespace RogueSquad.Client.Dx.Screens
         #endregion
 
         #region Initialization
-
+        GameSettings gameSettings;
+        AppSettings settings;
 
         /// <summary>
         /// Constructor.
@@ -46,6 +49,8 @@ namespace RogueSquad.Client.Dx.Screens
         public OptionsMenuScreen()
             : base("Nonsense Options")
         {
+            settings = new AppSettings();
+            gameSettings = settings.LoadSettings();
             // Create our menu entries.
             ungulateMenuEntry = new MenuEntry(string.Empty);
             languageMenuEntry = new MenuEntry(string.Empty);
@@ -61,6 +66,7 @@ namespace RogueSquad.Client.Dx.Screens
             languageMenuEntry.Selected += LanguageMenuEntrySelected;
             frobnicateMenuEntry.Selected += FrobnicateMenuEntrySelected;
             elfMenuEntry.Selected += ElfMenuEntrySelected;
+            back.Selected += Back_Selected;
             back.Selected += OnCancel;
             
             // Add entries to the menu.
@@ -69,6 +75,15 @@ namespace RogueSquad.Client.Dx.Screens
             MenuEntries.Add(frobnicateMenuEntry);
             MenuEntries.Add(elfMenuEntry);
             MenuEntries.Add(back);
+        }
+
+        private void Back_Selected(object sender, PlayerIndexEventArgs e)
+        {
+            //save settings
+            gameSettings.ResolutionH = Engine.Instance.ScreenHeight;
+            gameSettings.ResolutionW = Engine.Instance.ScreenWidth;
+            settings.SaveSettings(gameSettings);
+           
         }
 
 

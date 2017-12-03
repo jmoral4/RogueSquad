@@ -19,7 +19,7 @@ namespace RogueSquad.Core.Systems
         Camera2D _camera;
         ViewportAdapter _viewportAdapter;
         public IList<DebugRenderNode> _renderNodes = new List<DebugRenderNode>();
-        public ComponentTypes[] RequiredComponents { get; set; } = new ComponentTypes[] { ComponentTypes.SpriteComponent, ComponentTypes.PositionComponent, ComponentTypes.CollidableComponent, ComponentTypes.AIComponent};
+        public IEnumerable<ComponentTypes> Required { get; set; } = new ComponentTypes[] { ComponentTypes.SpriteComponent, ComponentTypes.PositionComponent, ComponentTypes.CollidableComponent, ComponentTypes.AIComponent};
         public DebugRenderSystem(SpriteBatch batch, Camera2D camera, ViewportAdapter viewportAdapter)
         {
             batchRef = batch;
@@ -33,7 +33,9 @@ namespace RogueSquad.Core.Systems
             var position = entity.GetComponentByType(ComponentTypes.PositionComponent) as PositionComponent;
             var collision = entity.GetComponentByType(ComponentTypes.CollidableComponent) as CollidableComponent;
             var ai = entity.GetComponentByType(ComponentTypes.AIComponent) as AIComponent;
-            _renderNodes.Add(new DebugRenderNode { Position = position, Renderable = render, Collision=collision, Id = entity.ID , AIData = ai});
+            var patrolData = entity.GetComponentByType(ComponentTypes.PatrolComponent) as PatrolComponent;
+            var followData = entity.GetComponentByType(ComponentTypes.FollowComponent) as FollowComponent;            
+            _renderNodes.Add(new DebugRenderNode { Position = position, Renderable = render, Collision=collision, Id = entity.ID , AIData = ai, FollowData = followData, PatrolData = patrolData});
         }
         public bool HasEntity(RogueEntity entity)
         {
@@ -53,20 +55,31 @@ namespace RogueSquad.Core.Systems
 
                 batchRef.DrawRectangleF(entity.Collision.BoundingRectangle, color);
 
-                if (!entity.AIData.IsPlayer)
+                if (!entity.AIData.IsPlayerControlled)
                 {
+                    if (entity.PatrolData != null)
+                    {
+                        if (entity.AIData.DetectedPlayer)
+                            batchRef.DrawRectangle(entity.PatrolData.PatrolArea, Color.Orange, 1f);
+                        else
+                            batchRef.DrawRectangle(entity.PatrolData.PatrolArea, Color.Blue, 1f);
+                    }
+
+                    //draw detection radius
+
                     if (entity.AIData.DetectedPlayer)
                     {
-                        batchRef.DrawRectangle(entity.AIData.DetectionRadius, Color.Orange, 1f);
+                        batchRef.DrawRectangle(entity.AIData.DetectionArea, Color.DarkRed);
                     }
                     else
                     {
-                        batchRef.DrawRectangle(entity.AIData.DetectionRadius, Color.Blue, 1f);
+                        batchRef.DrawRectangle(entity.AIData.DetectionArea, Color.Pink);
                     }
-                    if (entity.AIData.HasPatrolArea)
-                    {
-                        batchRef.DrawRectangle(entity.AIData.PatrolArea, Color.Pink);
-                    }
+
+                    //if (entity.AIData.HasPatrolArea)
+                    //{
+                    //    batchRef.DrawRectangle(entity.AIData.PatrolArea, Color.Pink);
+                    //}
                 }
 
             }

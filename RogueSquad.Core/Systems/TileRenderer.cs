@@ -48,7 +48,8 @@ namespace RogueSquad.Core.Systems
         int[,] Map { get; set; }
 
         Node[,] _map { get; set; }
-        public ComponentTypes[] RequiredComponents { get; set; } = new ComponentTypes[] { ComponentTypes.TileComponent };
+        public IEnumerable<ComponentTypes> Required { get; set; } = new ComponentTypes[] { ComponentTypes.TileComponent };
+        public IEnumerable<ComponentTypes> Any { get; set; } = Enumerable.Empty<ComponentTypes>();
 
         public MapRenderingSystem(List<Tile> tiles, Point tileDimensions, SpriteFont debugFont, SpriteBatch spriteBatch, Camera2D camera, ViewportAdapter viewportAdapter )
         {                        

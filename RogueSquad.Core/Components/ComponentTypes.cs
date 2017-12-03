@@ -4,7 +4,7 @@ namespace RogueSquad.Core.Components
 {
 
     public enum ComponentTypes {
-        BasicControllerComponent, PositionComponent, CollidableComponent, SpriteComponent, PhysicalComponent, TileComponent, AIComponent
+        ALL, BasicControllerComponent, PositionComponent, CollidableComponent, SpriteComponent, PhysicalComponent, TileComponent, AIComponent, FollowComponent, PatrolComponent, AnimationStateInfoComponent
     }
 
 }

@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Animations;
+using MonoGame.Extended.Animations.SpriteSheets;
+using MonoGame.Extended.Sprites;
 
 namespace RogueSquad.Core.Components
 {
@@ -12,6 +15,17 @@ namespace RogueSquad.Core.Components
 
     }
 
-  
+    public class AnimatedSpriteComponent : IRogueComponent {
+        public ComponentTypes ComponentType { get; set; } = ComponentTypes.SpriteComponent;        
+        public AnimatedSprite AnimatedSprite { get; set; }            
+        public string CurrentAnimation { get; set; }
+        public bool IsLooping { get; set; }
+        public bool IsPlaying { get; set; }
+        public AnimatedSpriteComponent(SpriteSheetAnimationFactory spriteData)
+        {
+            AnimatedSprite = new AnimatedSprite(spriteData);
+        }
+
+    }
 
 }

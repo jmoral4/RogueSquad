@@ -27,4 +27,5 @@ namespace RogueSquad.Core.Components
         }
         public ComponentTypes ComponentType { get; set; } = ComponentTypes.CollidableComponent;
     }
+
 }

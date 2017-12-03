@@ -6,10 +6,10 @@ using RogueSquad.Core.Systems;
 using RogueSquad.Core.Components;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
-using MonoGame.Extended.TextureAtlases;
-using MonoGame.Extended.Animations.SpriteSheets;
+using RogueSquad.Core.Utility;
 
 namespace RogueSquad.Core
 {
@@ -41,7 +41,48 @@ namespace RogueSquad.Core
             RenderSystems = new List<IRogueRenderSystem>();
             Entities = new List<RogueEntity>();
 
+            
+
         }
+
+
+        class VirtualKeys
+        {
+            public Keys VUp { get; set; }
+            public Keys VDown { get; set; }
+            public Keys VLeft { get; set; }
+            public Keys VRight { get; set; }
+            public Keys VTarget { get; set; }
+            public Keys VFire { get; set; }
+        }
+
+
+
+        private void LoadKeyMapping()
+        {
+            const string keyconfigFile = "keys.ini";
+            IniReader ini = new IniReader($"Content/{keyconfigFile}");
+            var kbKeys = ini.GetKeys("Keyboard");
+            var gpKeys = ini.GetKeys("Gamepad");
+            VirtualKeys vk = new VirtualKeys();
+            foreach (var kb in kbKeys)
+            {
+                var val = ini.GetValue(kb);
+                Keys mappedKey;
+                if (Enum.TryParse<Keys>(val, out mappedKey))
+                {
+                    
+                }
+                
+
+            }
+            
+
+
+        }
+
+
+
 
         public int EntityCount => Entities.Count;
 
@@ -68,66 +109,28 @@ namespace RogueSquad.Core
         private void CreateDemoScene(int worldWidth, int worldHeight)
         {
             //setup player
-            RogueEntity player;
+            RogueEntity player = RogueEntity.CreateNew();
             Vector2 startLocation = new Vector2(1000, 500);
-            //CreateStaticPlayer(out player, out startLocation);
-            player = CreateAnimatedPlayer(); 
-            AddEntity(player);
-
-            var ally = CreateAlly(new Vector2(900, 400), startLocation + new Vector2(-20, -20), new Vector2(-100, -100), player);
-            AddEntity(ally);
-            var ally2 = CreateAlly(new Vector2(800, 600), startLocation + new Vector2(-20, 20), new Vector2(-100, 100), player);
-            AddEntity(ally2);
-            //add two allies..            
-            AddRandomEnemies(worldWidth, worldHeight);
-        }
-
-        private void CreateStaticPlayer(out RogueEntity player, out Vector2 startLocation)
-        {
-            player = RogueEntity.CreateNew();
-            startLocation = new Vector2(1000, 500);
             var playerTex = Content.Load<Texture2D>("Assets/robit");
             player.AddComponent(new PositionComponent { Position = startLocation, Speed = .25f });
             player.AddComponent(new SpriteComponent { Texture = playerTex, Size = new Point(64, 96) });
             player.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(startLocation.X, startLocation.Y, 64, 96) });
             player.AddComponent(new BasicControllerComponent());
             player.AddComponent(new AIComponent { IsPlayerControlled = true });
+
+            AddEntity(player);
+
+            var ally = CreateAlly(new Vector2(900, 400), startLocation + new Vector2(-20, -20), new Vector2(-100, -100), player);
+            AddEntity(ally);
+            var ally2 = CreateAlly(new Vector2(800, 600), startLocation + new Vector2(-20, 20), new Vector2(-100, 100), player);
+            AddEntity(ally2);
+            //add two allies..
+            
+
+            AddRandomEnemies(worldWidth, worldHeight);
+
+
         }
-
-        private RogueEntity CreateAnimatedPlayer()
-        {
-            RogueEntity player = RogueEntity.CreateNew();
-            Vector2 startLocation = new Vector2(1000, 500);
-            player.AddComponent(new PositionComponent { Position = startLocation, Speed = .25f });
-            //player.AddComponent(new SpriteComponent { Texture = playerTex, Size = new Point(64, 96) });
-            var playerTexture = Content.Load<Texture2D>("Assets/KnightIsoChar");
-            var playerAtlas = TextureAtlas.Create("Animations/Player", playerTexture, 84, 84);
-            var playerFactory = new SpriteSheetAnimationFactory(playerAtlas);
-            playerFactory.Add("idle_down", new SpriteSheetAnimationData(new[] { 0, 1, 2, 3 }));
-            playerFactory.Add("down", new SpriteSheetAnimationData(new[] { 4, 5, 6, 7, 8 }, isLooping: true));
-            playerFactory.Add("up", new SpriteSheetAnimationData(new[] { 9, 10, 11, 12, 13 }, isLooping: true));
-            playerFactory.Add("idle_up", new SpriteSheetAnimationData(new[] { 29 }));
-            playerFactory.Add("idle_right", new SpriteSheetAnimationData(new[] { 14 }));
-            playerFactory.Add("right", new SpriteSheetAnimationData(new[] { 15, 16, 17, 18, 19 }, isLooping: true));
-            playerFactory.Add("idle_left", new SpriteSheetAnimationData(new[] { 20 }));
-            playerFactory.Add("left", new SpriteSheetAnimationData(new[] { 21, 22, 23, 24, 25 }, isLooping: true));
-            playerFactory.Add("atk_down", new SpriteSheetAnimationData(new[] { 27, 28 }, isLooping: false));
-            playerFactory.Add("atk_up", new SpriteSheetAnimationData(new[] { 30, 31 }, isLooping: false));
-            playerFactory.Add("atk_right", new SpriteSheetAnimationData(new[] { 34, 33 }, isLooping: false));
-            playerFactory.Add("atk_left", new SpriteSheetAnimationData(new[] { 37, 36 }, isLooping: false));
-
-            player.AddComponent(new AnimatedSpriteComponent(playerFactory)
-            {
-                CurrentAnimation = "idle_down"
-            } );
-            player.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(startLocation.X, startLocation.Y, 64, 96) });
-            player.AddComponent(new BasicControllerComponent());
-            player.AddComponent(new AIComponent { IsPlayerControlled = true });
-            player.AddComponent(new AnimationStateInfoComponent() { CurrentAnimationName = "idle_down" });
-
-            return player;
-        }
-
 
         private RogueEntity CreateAlly(Vector2 location, Vector2 followLocation, Vector2 followDistance, RogueEntity player)
         {
@@ -140,7 +143,9 @@ namespace RogueSquad.Core
                 new AIComponent {
                     IsPlayerControlled = false,
                     IsAlly = true,
-                    Faction = "Player" 
+                    Faction = "Player" //,
+                                       //FollowTarget = new RectangleF(followLocation.X, followLocation.Y, 62, 96),
+                                       //FollowDistance = followDistance 
                 });
             ally.AddComponent(
                 new FollowComponent {

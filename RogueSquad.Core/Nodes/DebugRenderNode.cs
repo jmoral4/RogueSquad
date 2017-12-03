@@ -11,7 +11,8 @@ namespace RogueSquad.Core.Nodes
         public CollidableComponent Collision { get; set; }
         public AIComponent AIData { get; set; }
 
-
+        public PatrolComponent PatrolData { get; set; }
+        public FollowComponent FollowData { get; set; }
     }
 
 }

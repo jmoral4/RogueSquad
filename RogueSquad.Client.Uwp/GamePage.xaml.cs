@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace RogueSquad.Client.Uwp
@@ -29,7 +30,7 @@ namespace RogueSquad.Client.Uwp
             this.InitializeComponent();
 
 			// Create the game.
-			var launchArguments = string.Empty;
+			var launchArguments = string.Empty;            
             _game = MonoGame.Framework.XamlGame<Game1>.Create(launchArguments, Window.Current.CoreWindow, swapChainPanel);
         }
     }

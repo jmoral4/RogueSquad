@@ -1,4 +1,4 @@
-#region Using Statements
+﻿#region Using Statements
 using System;
 using System.Threading;
 using Microsoft.Xna.Framework;
@@ -15,6 +15,7 @@ using RogueSquad.Client.Dx.Screens;
 using RogueSquad.Core.Components.General;
 using System.Collections.Generic;
 using MonoGame.Extended.ViewportAdapters;
+using RogueSquad.Core.Editors;
 
 #endregion
 
@@ -25,8 +26,9 @@ namespace RogueSquad.Client.Dx
     /// placeholder to get the idea across: you'll probably want to
     /// put some more interesting gameplay in here!
     /// </summary>
-    public class GameplayScreen : GameScreen
+    public class NpcEditorScreen : GameScreen
     {
+        NpcEditor _npcEditor;
         #region Fields
 
         ContentManager Content;     
@@ -39,12 +41,7 @@ namespace RogueSquad.Client.Dx
         FramesPerSecondCounter fps;
  
         KeyboardState previousKeyboardState;
-        KeyboardState currentKeyboardState;
-        MouseState previousMouseState;
-        MouseState currentMouseState;
-        double _elapsed;
-
-
+        KeyboardState currentKeyboardState;        
 
         Camera2D _camera;
         ViewportAdapter _viewportAdapter;
@@ -58,7 +55,7 @@ namespace RogueSquad.Client.Dx
         /// <summary>
         /// Constructor.
         /// </summary>
-        public GameplayScreen()
+        public NpcEditorScreen()
         {
             TransitionOnTime = TimeSpan.FromSeconds(1.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
@@ -86,47 +83,10 @@ namespace RogueSquad.Client.Dx
 
                 ScreenManager.Game.Components.Add(_console);
                 fps = new FramesPerSecondCounter();
-                // GeonBit.UI: Init the UI manager using the "hd" built-in theme
                 UserInterface.Initialize(Content, BuiltinThemes.hd);
-                // A real game would probably have more content than this, so
-                // it would take longer to load. We simulate that by delaying for a
-                // while, giving you a chance to admire the beautiful loading screen.
-                //Thread.Sleep(1000);
-
                 LoadContent();
-
-                // once the load has finished, we use ResetElapsedTime to tell the game's
-                // timing mechanism that we have just finished a very long frame, and that
-                // it should not try to catch up.
                 ScreenManager.Game.ResetElapsedTime();
             }
-        }
-
-        private void CreateEditorWindow()
-        {
-        
-
-
-            Panel panel = new Panel(new Vector2(1024, 768), PanelSkin.Default, Anchor.Center);
-            panel.Identifier = "Editor";
-            Panel imgPanel = new Panel(new Vector2(150, 150), PanelSkin.Default, Anchor.AutoInline);            
-            Texture2D entityTex = Content.Load<Texture2D>("Assets/robit");
-            imgPanel.AddChild(new Image(entityTex, new Vector2(0,0), ImageDrawMode.Stretch, Anchor.TopLeft));
-            panel.AddChild(imgPanel);
-
-            Panel entityInfo = new Panel(new Vector2(800, 300), PanelSkin.Default, Anchor.AutoInline );
-            Panel aiInfo = new Panel(new Vector2(600, 300), PanelSkin.Default, Anchor.AutoInline);            
-
-            panel.AddChild(entityInfo);
-            panel.AddChild(aiInfo);
-            var btn = new GeonBit.UI.Entities.Button("Close", ButtonSkin.Default, Anchor.BottomCenter);
-            btn.OnClick += (e) => { Console.WriteLine("clicked"); Entity en = e; en.Parent.Visible = false; };
-            panel.AddChild(btn);
-
-
-            //tabs.AddChild(panel);
-            UserInterface.Active.AddEntity(panel);
-
         }
 
         protected void LoadContent()
@@ -136,7 +96,6 @@ namespace RogueSquad.Client.Dx
 
             // create a panel and position in center of screen
             Panel panel = new Panel(new Vector2(400, 400), PanelSkin.Default, Anchor.Center);
-            panel.Identifier = "Startup";
             UserInterface.Active.AddEntity(panel);
 
             // add title and text
@@ -151,11 +110,6 @@ namespace RogueSquad.Client.Dx
 
             // add a button at the bottom
             panel.AddChild(btn);
-
-            panel.Visible = false;
-
-           // CreateEditorWindow();
-            
 
             world = new World(ScreenManager.GraphicsDevice, this.Content, Engine.Instance.ScreenWidth, Engine.Instance.ScreenHeight);
             _camera.Zoom = 1.0f;

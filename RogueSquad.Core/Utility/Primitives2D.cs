@@ -126,116 +126,116 @@ namespace RogueSquad.Core.Primitives
         #endregion
 
 
-        #region FillRectangle
+        //#region FillRectangle
 
-        /// <summary>
-        /// Draws a filled rectangle
-        /// </summary>
-        /// <param name="spriteBatch">The destination drawing surface</param>
-        /// <param name="rect">The rectangle to draw</param>
-        /// <param name="color">The color to draw the rectangle in</param>
-        public static void FillRectangle(this SpriteBatch spriteBatch, Rectangle rect, Color color)
-        {
-            if (pixel == null)
-            {
-                CreateThePixel(spriteBatch);
-            }
+        ///// <summary>
+        ///// Draws a filled rectangle
+        ///// </summary>
+        ///// <param name="spriteBatch">The destination drawing surface</param>
+        ///// <param name="rect">The rectangle to draw</param>
+        ///// <param name="color">The color to draw the rectangle in</param>
+        //public static void FillRectangle(this SpriteBatch spriteBatch, Rectangle rect, Color color)
+        //{
+        //    if (pixel == null)
+        //    {
+        //        CreateThePixel(spriteBatch);
+        //    }
 
-            // Simply use the function already there
-            spriteBatch.Draw(pixel, rect, color);
-        }
-
-
-        /// <summary>
-        /// Draws a filled rectangle
-        /// </summary>
-        /// <param name="spriteBatch">The destination drawing surface</param>
-        /// <param name="rect">The rectangle to draw</param>
-        /// <param name="color">The color to draw the rectangle in</param>
-        /// <param name="angle">The angle in radians to draw the rectangle at</param>
-        public static void FillRectangle(this SpriteBatch spriteBatch, Rectangle rect, Color color, float angle)
-        {
-            if (pixel == null)
-            {
-                CreateThePixel(spriteBatch);
-            }
-
-            spriteBatch.Draw(pixel, rect, null, color, angle, Vector2.Zero, SpriteEffects.None, 0);
-        }
+        //    // Simply use the function already there
+        //    spriteBatch.Draw(pixel, rect, color);
+        //}
 
 
-        /// <summary>
-        /// Draws a filled rectangle
-        /// </summary>
-        /// <param name="spriteBatch">The destination drawing surface</param>
-        /// <param name="location">Where to draw</param>
-        /// <param name="size">The size of the rectangle</param>
-        /// <param name="color">The color to draw the rectangle in</param>
-        public static void FillRectangle(this SpriteBatch spriteBatch, Vector2 location, Vector2 size, Color color)
-        {
-            FillRectangle(spriteBatch, location, size, color, 0.0f);
-        }
+        ///// <summary>
+        ///// Draws a filled rectangle
+        ///// </summary>
+        ///// <param name="spriteBatch">The destination drawing surface</param>
+        ///// <param name="rect">The rectangle to draw</param>
+        ///// <param name="color">The color to draw the rectangle in</param>
+        ///// <param name="angle">The angle in radians to draw the rectangle at</param>
+        //public static void FillRectangle(this SpriteBatch spriteBatch, Rectangle rect, Color color, float angle)
+        //{
+        //    if (pixel == null)
+        //    {
+        //        CreateThePixel(spriteBatch);
+        //    }
+
+        //    spriteBatch.Draw(pixel, rect, null, color, angle, Vector2.Zero, SpriteEffects.None, 0);
+        //}
 
 
-        /// <summary>
-        /// Draws a filled rectangle
-        /// </summary>
-        /// <param name="spriteBatch">The destination drawing surface</param>
-        /// <param name="location">Where to draw</param>
-        /// <param name="size">The size of the rectangle</param>
-        /// <param name="angle">The angle in radians to draw the rectangle at</param>
-        /// <param name="color">The color to draw the rectangle in</param>
-        public static void FillRectangle(this SpriteBatch spriteBatch, Vector2 location, Vector2 size, Color color, float angle)
-        {
-            if (pixel == null)
-            {
-                CreateThePixel(spriteBatch);
-            }
-
-            // stretch the pixel between the two vectors
-            spriteBatch.Draw(pixel,
-                             location,
-                             null,
-                             color,
-                             angle,
-                             Vector2.Zero,
-                             size,
-                             SpriteEffects.None,
-                             0);
-        }
+        ///// <summary>
+        ///// Draws a filled rectangle
+        ///// </summary>
+        ///// <param name="spriteBatch">The destination drawing surface</param>
+        ///// <param name="location">Where to draw</param>
+        ///// <param name="size">The size of the rectangle</param>
+        ///// <param name="color">The color to draw the rectangle in</param>
+        //public static void FillRectangle(this SpriteBatch spriteBatch, Vector2 location, Vector2 size, Color color)
+        //{
+        //    FillRectangle(spriteBatch, location, size, color, 0.0f);
+        //}
 
 
-        /// <summary>
-        /// Draws a filled rectangle
-        /// </summary>
-        /// <param name="spriteBatch">The destination drawing surface</param>
-        /// <param name="x">The X coord of the left side</param>
-        /// <param name="y">The Y coord of the upper side</param>
-        /// <param name="w">Width</param>
-        /// <param name="h">Height</param>
-        /// <param name="color">The color to draw the rectangle in</param>
-        public static void FillRectangle(this SpriteBatch spriteBatch, float x, float y, float w, float h, Color color)
-        {
-            FillRectangle(spriteBatch, new Vector2(x, y), new Vector2(w, h), color, 0.0f);
-        }
+        ///// <summary>
+        ///// Draws a filled rectangle
+        ///// </summary>
+        ///// <param name="spriteBatch">The destination drawing surface</param>
+        ///// <param name="location">Where to draw</param>
+        ///// <param name="size">The size of the rectangle</param>
+        ///// <param name="angle">The angle in radians to draw the rectangle at</param>
+        ///// <param name="color">The color to draw the rectangle in</param>
+        //public static void FillRectangle(this SpriteBatch spriteBatch, Vector2 location, Vector2 size, Color color, float angle)
+        //{
+        //    if (pixel == null)
+        //    {
+        //        CreateThePixel(spriteBatch);
+        //    }
+
+        //    // stretch the pixel between the two vectors
+        //    spriteBatch.Draw(pixel,
+        //                     location,
+        //                     null,
+        //                     color,
+        //                     angle,
+        //                     Vector2.Zero,
+        //                     size,
+        //                     SpriteEffects.None,
+        //                     0);
+        //}
 
 
-        /// <summary>
-        /// Draws a filled rectangle
-        /// </summary>
-        /// <param name="spriteBatch">The destination drawing surface</param>
-        /// <param name="x">The X coord of the left side</param>
-        /// <param name="y">The Y coord of the upper side</param>
-        /// <param name="w">Width</param>
-        /// <param name="h">Height</param>
-        /// <param name="color">The color to draw the rectangle in</param>
-        /// <param name="angle">The angle of the rectangle in radians</param>
-        public static void FillRectangle(this SpriteBatch spriteBatch, float x, float y, float w, float h, Color color, float angle)
-        {
-            FillRectangle(spriteBatch, new Vector2(x, y), new Vector2(w, h), color, angle);
-        }
+        ///// <summary>
+        ///// Draws a filled rectangle
+        ///// </summary>
+        ///// <param name="spriteBatch">The destination drawing surface</param>
+        ///// <param name="x">The X coord of the left side</param>
+        ///// <param name="y">The Y coord of the upper side</param>
+        ///// <param name="w">Width</param>
+        ///// <param name="h">Height</param>
+        ///// <param name="color">The color to draw the rectangle in</param>
+        //public static void FillRectangle(this SpriteBatch spriteBatch, float x, float y, float w, float h, Color color)
+        //{
+        //    FillRectangle(spriteBatch, new Vector2(x, y), new Vector2(w, h), color, 0.0f);
+        //}
 
-        #endregion
+
+        ///// <summary>
+        ///// Draws a filled rectangle
+        ///// </summary>
+        ///// <param name="spriteBatch">The destination drawing surface</param>
+        ///// <param name="x">The X coord of the left side</param>
+        ///// <param name="y">The Y coord of the upper side</param>
+        ///// <param name="w">Width</param>
+        ///// <param name="h">Height</param>
+        ///// <param name="color">The color to draw the rectangle in</param>
+        ///// <param name="angle">The angle of the rectangle in radians</param>
+        //public static void FillRectangle(this SpriteBatch spriteBatch, float x, float y, float w, float h, Color color, float angle)
+        //{
+        //    FillRectangle(spriteBatch, new Vector2(x, y), new Vector2(w, h), color, angle);
+        //}
+
+        //#endregion
 
 
         #region DrawRectangle
@@ -261,10 +261,6 @@ namespace RogueSquad.Core.Primitives
         /// <param name="thickness">The thickness of the lines</param>
         public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rect, Color color, float thickness)
         {
-
-            // TODO: Handle rotations
-            // TODO: Figure out the pattern for the offsets required and then handle it in the line instead of here
-
             DrawLine(spriteBatch, new Vector2(rect.X, rect.Y), new Vector2(rect.Right, rect.Y), color, thickness); // top
             DrawLine(spriteBatch, new Vector2(rect.X + 1f, rect.Y), new Vector2(rect.X + 1f, rect.Bottom + thickness), color, thickness); // left
             DrawLine(spriteBatch, new Vector2(rect.X, rect.Bottom), new Vector2(rect.Right, rect.Bottom), color, thickness); // bottom

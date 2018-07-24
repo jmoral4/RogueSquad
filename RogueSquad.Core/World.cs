@@ -80,7 +80,7 @@ namespace RogueSquad.Core
             AddEntity(player);
           
             Vector2 startLocation = (player.GetComponentByType(ComponentTypes.PositionComponent) as PositionComponent).Position;
-            var ally = _entityFactory.CreateKnightAlly(new Vector2(900, 400), startLocation + new Vector2(-20, -20), new Vector2(-100, -100), player);
+            var ally = _entityFactory.CreateAlly(new Vector2(900, 400), startLocation + new Vector2(-20, -20), new Vector2(-100, -100), player);
             AddEntity(ally);
             var ally2 = _entityFactory.CreateAlly(new Vector2(800, 600), startLocation + new Vector2(-20, 20), new Vector2(-100, 100), player);
             AddEntity(ally2);

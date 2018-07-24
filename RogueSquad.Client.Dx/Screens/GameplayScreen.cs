@@ -13,6 +13,7 @@ using GeonBit.UI.Entities;
 using QuakeConsole;
 using RogueSquad.Client.Dx.Screens;
 using RogueSquad.Core.Components.General;
+using RogueSquad.Core.Utility;
 using System.Collections.Generic;
 using MonoGame.Extended.ViewportAdapters;
 
@@ -44,11 +45,11 @@ namespace RogueSquad.Client.Dx
         MouseState currentMouseState;
         double _elapsed;
 
-
+        Color _fadeColor = Color.Black;
 
         Camera2D _camera;
         ViewportAdapter _viewportAdapter;
-
+        CoroutineHolder _coroutines;
 
         #endregion
 
@@ -129,9 +130,62 @@ namespace RogueSquad.Client.Dx
 
         }
 
+        protected void TestCoRoutine()
+        {
+            _coroutines = new CoroutineHolder();            
+            _coroutines.StartCoroutine(GetColor());
+        }
+
+        protected IEnumerator<Color> GetColor()
+        {
+            foreach (var z in GetColors())
+            {
+                Console.WriteLine($"Color is:{z.A}{z.R}{z.G}{z.B}");
+                _fadeColor = z;
+                yield return z;
+            }
+        }
+
+        protected IEnumerable<Color> GetColors()
+        {
+            Random r = new Random();
+            Color c = new Color(0, 0, 0);
+            int i = 0;
+            while (i < 255)
+            {
+                i++;
+                yield return new Color(i, i, i);
+            }
+            
+        }
+
+
+        protected IEnumerator<int> GetFunc()
+        {
+            foreach (var z in GetRandoms())
+            {
+                //for later
+                Console.WriteLine($"GetFunc:{z}");
+                yield return z;
+            }
+
+        }
+        protected IEnumerable<int> GetRandoms()
+        {
+            yield return 12;
+            yield return 16;
+            yield return 45;
+            yield return 37;
+            yield return 85;
+            yield return 34;
+            yield return 16;
+
+        }
+ 
         protected void LoadContent()
         {
-            _viewportAdapter = new BoxingViewportAdapter(ScreenManager.Game.Window, ScreenManager.GraphicsDevice, 1920, 1080);
+            TestCoRoutine(); 
+            _viewportAdapter = new BoxingViewportAdapter(ScreenManager.Game.Window, ScreenManager.GraphicsDevice, 1280, 720);
             _camera = new Camera2D(_viewportAdapter);
 
             // create a panel and position in center of screen
@@ -213,6 +267,11 @@ namespace RogueSquad.Client.Dx
         {
             base.Update(gameTime, otherScreenHasFocus, false);
 
+            if (!_coroutines.IsEmpty)
+            {
+                Console.WriteLine("Called Update");
+            }
+
             // Gradually fade in or out depending on whether we are covered by the pause screen.
             if (coveredByOtherScreen)
                 pauseAlpha = Math.Min(pauseAlpha + 1f / 32, 1);
@@ -226,6 +285,14 @@ namespace RogueSquad.Client.Dx
                 UserInterface.Active.Update(gameTime);                
                 world.Update(gameTime);
 
+                _coroutines.Update();
+            }
+
+            //we can swap the color 
+            if (_coroutines.IsEmpty)
+            {
+                _coroutines.StartCoroutine(GetColor());
+                _fadeColor = Color.Black;
             }
 
             
@@ -307,33 +374,32 @@ namespace RogueSquad.Client.Dx
 
             //_camera = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, 256, 128);
             ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,
-                Color.CornflowerBlue, 0, 0);
+                Color.Red, 0, 0);
             ScreenManager.Game.Window.Title = "Fps:" + fps.FramesPerSecond + " Entities: " + world.EntityCount;
             fps.Draw(gameTime);
             // Our player and enemy are both actually just text strings.
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
-            // spriteBatch.Begin();
+             spriteBatch.Begin();
 
-            // ScreenManager.Game.Window.Title = "Fps:" + fps.FramesPerSecond + " Entities: " + world.EntityCount;
-            // fps.Draw(gameTime);            
+            ScreenManager.Game.Window.Title = "Fps:" + fps.FramesPerSecond + " Entities: " + world.EntityCount;
+            fps.Draw(gameTime);
             //_trs.Draw(gameTime);
-          
-             world.Draw(gameTime);
 
+            world.Draw(gameTime);            
+
+
+            spriteBatch.End();
 
             UserInterface.Active.Draw(spriteBatch);
 
-
-            // spriteBatch.End();
-
             // If the game is transitioning on or off, fade it out to black.
-            if (TransitionPosition > 0 || pauseAlpha > 0)
-            {
-                float alpha = MathHelper.Lerp(1f - TransitionAlpha, 1f, pauseAlpha / 2);
+            //if (TransitionPosition > 0 || pauseAlpha > 0)
+            //{
+            //    float alpha = MathHelper.Lerp(1f - TransitionAlpha, 1f, pauseAlpha / 2);
 
-                ScreenManager.FadeBackBufferToBlack(alpha);
-            }
+            //    ScreenManager.FadeBackBufferToBlack(alpha);
+            //}
         }
 
 

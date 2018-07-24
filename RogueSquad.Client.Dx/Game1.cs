@@ -38,20 +38,24 @@ namespace RogueSquad.Client.Dx
             Engine.Instance.VersionString = $"{version}";
 
             graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content"; 
-            //Window.AllowUserResizing = true;
-           // IsMouseVisible = true;
             
-            //TargetElapsedTime = TimeSpan.FromTicks(33333);
+            Content.RootDirectory = "Content";
+            //Window.AllowUserResizing = true;
+            // IsMouseVisible = true;
+            
+            foreach (var mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
+            {
+                Console.WriteLine($"Display Mode: {mode}");
+            }
+
             Engine.Instance.DesiredFPS = 60;
-            IsFixedTimeStep = false;
-            graphics.SynchronizeWithVerticalRetrace = false;
+            IsFixedTimeStep = true;
+            graphics.SynchronizeWithVerticalRetrace = true;
             graphics.PreferredBackBufferWidth = defaultBackBufferWidth;
             graphics.PreferredBackBufferHeight = defaultBackBufferHeight;            
 
             Window.Position = new Point((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2) - (graphics.PreferredBackBufferWidth / 2), (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - (graphics.PreferredBackBufferHeight / 2));
 
-            //TargetElapsedTime = TimeSpan.FromTicks(333333);
             screenFactory = new ScreenFactory();
             Services.AddService(typeof(IScreenFactory), screenFactory);
             

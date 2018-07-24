@@ -21,6 +21,7 @@ namespace RogueSquad.Core.Systems
     {
         public string Name { get; set; }
         public Texture2D Texture { get; set; }
+        public Rectangle Source { get; set; }
         public bool IsWalkable { get; set; }
         public bool IsDetail { get; set; } //rendered on top of tiles        
         public int Width { get; set; }
@@ -42,7 +43,7 @@ namespace RogueSquad.Core.Systems
         readonly int _xOffset;
         readonly int _yOffset;
         Point _mapDimensions;
-        int offset = -100;
+        int offset = -100;    //overall offset for debug purposes
         Camera2D _camera;
         ViewportAdapter _viewportAdapter;
         int[,] Map { get; set; }
@@ -57,7 +58,7 @@ namespace RogueSquad.Core.Systems
             _font = debugFont;
             _spriteBatch = spriteBatch;
             _tileDimensions = tileDimensions;
-            _xOffset = tileDimensions.X / 2;
+            _xOffset = tileDimensions.X / 2;  //tile offset assuming a 2:1 ratio
             _yOffset = tileDimensions.Y / 2;
             _camera = camera;
             _viewportAdapter = viewportAdapter;
@@ -120,9 +121,8 @@ namespace RogueSquad.Core.Systems
                     {
                         var v = new Vector2((x * _tileDimensions.X) + offset, (y * _yOffset) + offset);
                         _spriteBatch.Draw(
-                            _map[x, y].TileStack[0].Texture,
-                            //Map[x, y] == 0 ? _tiles[0].Texture : _tiles[1].Texture,
-                           v,
+                            _map[x, y].TileStack[0].Texture, new Rectangle((int)v.X, (int)v.Y, _tileDimensions.X, _tileDimensions.Y),
+                            _map[x, y].TileStack[0].Source, 
                             Color.White
                             );
                         // _spriteBatch.DrawString(_font, $"{x},{y}", v, Color.Red);
@@ -132,11 +132,11 @@ namespace RogueSquad.Core.Systems
                         var v = new Vector2((x * _tileDimensions.X) + offset - _tileDimensions.Y, (y * _yOffset) + offset);
                         _spriteBatch.Draw(
                             _map[x, y].TileStack[0].Texture,
-                                                    //Map[x, y] == 0 ? _tiles[0].Texture : _tiles[1].Texture,
-                                                     v,
+                                                   new Rectangle((int)v.X, (int)v.Y, _tileDimensions.X, _tileDimensions.Y),
+                                                   _map[x, y].TileStack[0].Source,
                                                     Color.White
                                                     );
-                        //_spriteBatch.DrawString(_font, $"{x},{y}-A", v, Color.Red);
+                       // _spriteBatch.DrawString(_font, $"{x},{y}-A", v, Color.Red);
                     }
 
                 }
@@ -168,99 +168,5 @@ namespace RogueSquad.Core.Systems
         }
     }
 
-
-    public class TileRenderingSystem 
-    {
-        public int [,]   Map { get; set; }
-
-        private SpriteBatch _spriteBatch;
-
-        Texture2D _grass;
-        Texture2D _stone;
-        SpriteFont _font;
-
-        int tileW = 256;
-        int tileH = 169;
-        int offset = 100;
-        int xOff;
-        int yOff;
-
-        public TileRenderingSystem(SpriteBatch spriteBatch, Texture2D grass, Texture2D stone, SpriteFont font)
-        {
-            _spriteBatch = spriteBatch;
-            _grass = grass;
-            _stone = stone;
-             xOff = tileW / 2;
-            yOff = tileH / 2;
-            _font = font;
-        }
-
-
-        public void CreateMap(int w, int h)
-        {
-            Map = new int[w, h];
-            Random rand = new Random();
-            for (int i = 0; i < Map.GetLength(0); i++)
-            {
-                for (int j = 0; j < Map.GetLength(1); j++)
-                {
-                    if (rand.Next(0, 100) > 70)
-                    {
-                        Map[i, j] = 1;
-                    }
-                    else
-                    {
-                        Map[i, j] = 0;
-                    }
-                }
-            }
-
-        }
-
-        public void Draw(GameTime gameTime)
-        {
-            bool alt = false;
-            _spriteBatch.Begin();
-            for (int y = 0; y < Map.GetLength(1); y++)
-                
-            {
-
-                for (int x = 0; x < Map.GetLength(0); x++)
-                {
-                    if (alt)
-                    {
-                        var v = new Vector2((x * tileW) + offset, (y * yOff) + offset);
-                        _spriteBatch.Draw(
-                            Map[x, y] == 0 ? _grass : _stone,
-                           v,
-                            Color.White
-                            );
-                       // _spriteBatch.DrawString(_font, $"{x},{y}", v, Color.Red);
-                    }
-                    else
-                    {
-                        var v = new Vector2((x * tileW) + offset - 128 , (y * yOff) + offset);
-                        _spriteBatch.Draw(
-                                                    Map[x, y] == 0 ? _grass : _stone,
-                                                     v,
-                                                    Color.White
-                                                    );
-                        //_spriteBatch.DrawString(_font, $"{x},{y}-A", v, Color.Red);
-                    }
-                  
-                }
-                alt = !alt;
-            }
-
-
-
-            _spriteBatch.End();
-
-
-
-        }
-        
-
-
-    }
+    
 }

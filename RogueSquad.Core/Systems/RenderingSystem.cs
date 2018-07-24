@@ -73,17 +73,13 @@ namespace RogueSquad.Core.Systems
                     }
                 }
                 else
-                {
+                {                    
                     batchRef.Draw(entity.AnimatedSpriteData.AnimatedSprite);
                 }
                 
+                
             }
             batchRef.End();
-
-        }
-
-        public void UpdateAnimationStatesIfNeeded(AnimatedSpriteComponent ac, AnimationStateInfoComponent pc)
-        {
 
         }
 

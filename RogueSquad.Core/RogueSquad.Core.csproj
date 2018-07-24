@@ -33,6 +33,46 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EditAndContinueDebug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\EditAndContinueDebug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EditAndContinueDebug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\EditAndContinueDebug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="project.json" />
     <!-- A reference to the entire .NET Framework is automatically included -->
@@ -51,16 +91,20 @@
     <Compile Include="Components\PhysicalComponent.cs" />
     <Compile Include="Components\PlayerStateInfo.cs" />
     <Compile Include="Editors\NpcEditor.cs" />
+    <Compile Include="Entities\EntityFactory.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Nodes\CollisionNode.cs" />
     <Compile Include="Nodes\INode.cs" />
     <Compile Include="Settings\AppSettings.cs" />
     <Compile Include="Nodes\AINode.cs" />
     <Compile Include="AI\Behaviors\AIBehavior.cs" />
+    <Compile Include="Shaders\PSShaders.cs" />
     <Compile Include="Systems\AISystem.cs" />
     <Compile Include="Systems\BasicControllingSystem.cs" />
     <Compile Include="Nodes\ControllerNode.cs" />
     <Compile Include="Components\IRogueComponent.cs" />
     <Compile Include="Components\PositionComponent.cs" />
+    <Compile Include="Systems\CanvasRenderSystem.cs" />
     <Compile Include="Systems\CollisionSystem.cs" />
     <Compile Include="Nodes\DebugRenderNode.cs" />
     <Compile Include="Systems\DebugRenderSystem.cs" />
@@ -72,6 +116,7 @@
     <Compile Include="RogueEntity.cs" />
     <Compile Include="Systems\IRogueRenderSystem.cs" />
     <Compile Include="Systems\IRogueSystem.cs" />
+    <Compile Include="Utility\CoRoutine.cs" />
     <Compile Include="Utility\JsonTypeLoader.cs" />
     <Compile Include="Utility\Primitives2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,37 +127,7 @@
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Entities\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\MonoGame.Extended\Source\MonoGame.Extended.Animations\MonoGame.Extended.Animations.csproj">
-      <Project>{587ce536-216f-41a1-b223-ae502c125b09}</Project>
-      <Name>MonoGame.Extended.Animations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended\Source\MonoGame.Extended.Collisions\MonoGame.Extended.Collisions.csproj">
-      <Project>{02562c6f-5bfb-467e-8a95-68b6ce2d635a}</Project>
-      <Name>MonoGame.Extended.Collisions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended\Source\MonoGame.Extended.Graphics\MonoGame.Extended.Graphics.csproj">
-      <Project>{9b3ab8a1-78aa-471a-afd0-b10b932115bc}</Project>
-      <Name>MonoGame.Extended.Graphics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended\Source\MonoGame.Extended.Input\MonoGame.Extended.Input.csproj">
-      <Project>{49c87598-994c-49b5-bbb3-7ffc342635d3}</Project>
-      <Name>MonoGame.Extended.Input</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended\Source\MonoGame.Extended.Particles\MonoGame.Extended.Particles.csproj">
-      <Project>{6c8b9e29-d09b-4901-80fd-45aaa35882c6}</Project>
-      <Name>MonoGame.Extended.Particles</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended\Source\MonoGame.Extended.Tweening\MonoGame.Extended.Tweening.csproj">
-      <Project>{1cf61f4f-a2ee-49bf-95d0-379e870de90e}</Project>
-      <Name>MonoGame.Extended.Tweening</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Extended\Source\MonoGame.Extended\MonoGame.Extended.csproj">
-      <Project>{41724c52-3d50-45bb-81eb-3c8a247eafd1}</Project>
-      <Name>MonoGame.Extended</Name>
-    </ProjectReference>
+    <Folder Include="Entities\Prefab\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

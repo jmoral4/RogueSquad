@@ -17,4 +17,6 @@ namespace RogueSquad.Core.Components
         public string CurrentAnimationName { get; set; }
 
     }
+
+   
 }

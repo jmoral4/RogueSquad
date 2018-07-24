@@ -10,6 +10,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.Animations.SpriteSheets;
+using RogueSquad.Core.Entities;
 
 namespace RogueSquad.Core
 {
@@ -24,9 +25,13 @@ namespace RogueSquad.Core
 
         GraphicsDevice _graphicsDeviceRef;
         SpriteBatch _renderBatcher;
+        EntityFactory _entityFactory;
+
         public ContentManager Content { get; set; }
         int w = 1920;
         int h = 1080;
+        const int PLAYER_H = 96;
+        const int PLAYER_W = 64;
         Camera2D _camera;
         ViewportAdapter _viewPort;
 
@@ -40,6 +45,7 @@ namespace RogueSquad.Core
             Systems = new List<IRogueSystem>();
             RenderSystems = new List<IRogueRenderSystem>();
             Entities = new List<RogueEntity>();
+            _entityFactory = new EntityFactory(Content);
 
         }
 
@@ -62,21 +68,21 @@ namespace RogueSquad.Core
         {
             _camera = camera;
             _viewPort = viewport;
+          
+          
         }
 
 
         private void CreateDemoScene(int worldWidth, int worldHeight)
         {
             //setup player
-            RogueEntity player;
-            Vector2 startLocation = new Vector2(1000, 500);
-            //CreateStaticPlayer(out player, out startLocation);
-            player = CreateAnimatedPlayer(); 
+            RogueEntity player = _entityFactory.Create("PlayerChar");
             AddEntity(player);
-
-            var ally = CreateAlly(new Vector2(900, 400), startLocation + new Vector2(-20, -20), new Vector2(-100, -100), player);
+          
+            Vector2 startLocation = (player.GetComponentByType(ComponentTypes.PositionComponent) as PositionComponent).Position;
+            var ally = _entityFactory.CreateKnightAlly(new Vector2(900, 400), startLocation + new Vector2(-20, -20), new Vector2(-100, -100), player);
             AddEntity(ally);
-            var ally2 = CreateAlly(new Vector2(800, 600), startLocation + new Vector2(-20, 20), new Vector2(-100, 100), player);
+            var ally2 = _entityFactory.CreateAlly(new Vector2(800, 600), startLocation + new Vector2(-20, 20), new Vector2(-100, 100), player);
             AddEntity(ally2);
             //add two allies..            
             AddRandomEnemies(worldWidth, worldHeight);
@@ -88,69 +94,12 @@ namespace RogueSquad.Core
             startLocation = new Vector2(1000, 500);
             var playerTex = Content.Load<Texture2D>("Assets/robit");
             player.AddComponent(new PositionComponent { Position = startLocation, Speed = .25f });
-            player.AddComponent(new SpriteComponent { Texture = playerTex, Size = new Point(64, 96) });
-            player.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(startLocation.X, startLocation.Y, 64, 96) });
+            player.AddComponent(new SpriteComponent { Texture = playerTex, Size = new Point(PLAYER_W, PLAYER_H) });
+            player.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(startLocation.X, startLocation.Y, PLAYER_W, PLAYER_H) });
             player.AddComponent(new BasicControllerComponent());
             player.AddComponent(new AIComponent { IsPlayerControlled = true });
         }
-
-        private RogueEntity CreateAnimatedPlayer()
-        {
-            RogueEntity player = RogueEntity.CreateNew();
-            Vector2 startLocation = new Vector2(1000, 500);
-            player.AddComponent(new PositionComponent { Position = startLocation, Speed = .25f });
-            //player.AddComponent(new SpriteComponent { Texture = playerTex, Size = new Point(64, 96) });
-            var playerTexture = Content.Load<Texture2D>("Assets/KnightIsoChar");
-            var playerAtlas = TextureAtlas.Create("Animations/Player", playerTexture, 84, 84);
-            var playerFactory = new SpriteSheetAnimationFactory(playerAtlas);
-            playerFactory.Add("idle_down", new SpriteSheetAnimationData(new[] { 0, 1, 2, 3 }));
-            playerFactory.Add("down", new SpriteSheetAnimationData(new[] { 4, 5, 6, 7, 8 }, isLooping: true));
-            playerFactory.Add("up", new SpriteSheetAnimationData(new[] { 9, 10, 11, 12, 13 }, isLooping: true));
-            playerFactory.Add("idle_up", new SpriteSheetAnimationData(new[] { 29 }));
-            playerFactory.Add("idle_right", new SpriteSheetAnimationData(new[] { 14 }));
-            playerFactory.Add("right", new SpriteSheetAnimationData(new[] { 15, 16, 17, 18, 19 }, isLooping: true));
-            playerFactory.Add("idle_left", new SpriteSheetAnimationData(new[] { 20 }));
-            playerFactory.Add("left", new SpriteSheetAnimationData(new[] { 21, 22, 23, 24, 25 }, isLooping: true));
-            playerFactory.Add("atk_down", new SpriteSheetAnimationData(new[] { 27, 28 }, isLooping: false));
-            playerFactory.Add("atk_up", new SpriteSheetAnimationData(new[] { 30, 31 }, isLooping: false));
-            playerFactory.Add("atk_right", new SpriteSheetAnimationData(new[] { 34, 33 }, isLooping: false));
-            playerFactory.Add("atk_left", new SpriteSheetAnimationData(new[] { 37, 36 }, isLooping: false));
-
-            player.AddComponent(new AnimatedSpriteComponent(playerFactory)
-            {
-                CurrentAnimation = "idle_down"
-            } );
-            player.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(startLocation.X, startLocation.Y, 64, 96) });
-            player.AddComponent(new BasicControllerComponent());
-            player.AddComponent(new AIComponent { IsPlayerControlled = true });
-            player.AddComponent(new AnimationStateInfoComponent() { CurrentAnimationName = "idle_down" });
-
-            return player;
-        }
-
-
-        private RogueEntity CreateAlly(Vector2 location, Vector2 followLocation, Vector2 followDistance, RogueEntity player)
-        {
-            RogueEntity ally = RogueEntity.CreateNew();
-            var playerTex = Content.Load<Texture2D>("Assets/Walking_sm");
-            ally.AddComponent(new PositionComponent { Position = location, Speed = .25f });
-            ally.AddComponent(new SpriteComponent { Texture = playerTex, Size = new Point(64, 96) });
-            ally.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(location.X, location.Y, 64, 96) });            
-            ally.AddComponent(
-                new AIComponent {
-                    IsPlayerControlled = false,
-                    IsAlly = true,
-                    Faction = "Player" 
-                });
-            ally.AddComponent(
-                new FollowComponent {
-                    FollowTarget = player.ID,
-                    FollowDistance = followDistance,
-                    FollowTargetLocation = new RectangleF(followLocation.X, followLocation.Y, 62, 96)
-                });
-
-            return ally;
-        }
+        
 
         public bool IsPaused => _isPaused;
 
@@ -213,7 +162,8 @@ namespace RogueSquad.Core
             RegisterSystem(new BasicControllingSystem(this));
             RegisterSystem(new CollisionSystem());
             RegisterSystem(new AISystem());
-            RegisterRenderSystem(CreateMapRenderingSystem(100,100));
+            //RegisterRenderSystem(new CanvasRenderSystem(Content, new Point(1920, 1080), _renderBatcher));
+            RegisterRenderSystem(CreateTileRendering(100,100));
             RegisterRenderSystem(new RenderingSystem(_renderBatcher, _camera, _viewPort));
             
         }
@@ -265,6 +215,62 @@ namespace RogueSquad.Core
             return mrs; 
 
         }
+
+        private IRogueRenderSystem CreateTileRendering(int mapWidth, int mapHeight)
+        {
+            var mrs = new MapRenderingSystem(new List<Tile> {
+                        new Tile
+                        {
+                            Name= "Sand1",
+                            Texture = Content.Load<Texture2D>("Proto/Tiles"),
+                            Source= new Rectangle(0,0,256,128),
+                            IsWalkable = true,
+                            TileType = MapTileTypes.Ground
+                        },
+                                                new Tile
+                        {
+                            Name= "Sand2",
+                            Texture = Content.Load<Texture2D>("Proto/Tiles"),
+                            Source= new Rectangle(256,0,256,128),
+                            IsWalkable = true,
+                            TileType = MapTileTypes.Ground
+                        },
+                                                                        new Tile
+                        {
+                            Name= "Sand3",
+                            Texture = Content.Load<Texture2D>("Proto/Tiles"),
+                            Source= new Rectangle(512,0,256,128),
+                            IsWalkable = true,
+                            TileType = MapTileTypes.Ground
+                        },
+                                                                                                new Tile
+                        {
+                            Name= "Sand4",
+                            Texture = Content.Load<Texture2D>("Proto/Tiles"),
+                            Source= new Rectangle(768,0,256,128),
+                            IsWalkable = true,
+                            TileType = MapTileTypes.Ground
+                        }, new Tile
+                        {
+                            Name= "Sand5",
+                            Texture = Content.Load<Texture2D>("Proto/Tiles"),
+                            Source= new Rectangle(1024,0,256,128),
+                            IsWalkable = true,
+                            TileType = MapTileTypes.Ground
+                        }
+
+                    },
+                    new Point(256, 128),
+                    Content.Load<SpriteFont>("Fonts/gamefont"),
+                    _renderBatcher,
+                    _camera,
+                    _viewPort
+                );
+            mrs.CreateMap(mapWidth, mapHeight);
+
+            return mrs;
+        }
+
 
         bool _debugEnabled = false;
         public bool IsDebugEnabled => _debugEnabled;

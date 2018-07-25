@@ -49,7 +49,6 @@ namespace RogueSquad.Client.Dx
 
         Camera2D _camera;
         ViewportAdapter _viewportAdapter;
-        CoroutineHolder _coroutines;
 
         #endregion
 
@@ -111,7 +110,7 @@ namespace RogueSquad.Client.Dx
             Panel panel = new Panel(new Vector2(1024, 768), PanelSkin.Default, Anchor.Center);
             panel.Identifier = "Editor";
             Panel imgPanel = new Panel(new Vector2(150, 150), PanelSkin.Default, Anchor.AutoInline);            
-            Texture2D entityTex = Content.Load<Texture2D>("Assets/robit");
+            Texture2D entityTex = Content.Load<Texture2D>("JeremyLightcap/robit");
             imgPanel.AddChild(new Image(entityTex, new Vector2(0,0), ImageDrawMode.Stretch, Anchor.TopLeft));
             panel.AddChild(imgPanel);
 
@@ -129,69 +128,18 @@ namespace RogueSquad.Client.Dx
             UserInterface.Active.AddEntity(panel);
 
         }
-
-        protected void TestCoRoutine()
-        {
-            _coroutines = new CoroutineHolder();            
-            _coroutines.StartCoroutine(GetColor());
-        }
-
-        protected IEnumerator<Color> GetColor()
-        {
-            foreach (var z in GetColors())
-            {
-                Console.WriteLine($"Color is:{z.A}{z.R}{z.G}{z.B}");
-                _fadeColor = z;
-                yield return z;
-            }
-        }
-
-        protected IEnumerable<Color> GetColors()
-        {
-            Random r = new Random();
-            Color c = new Color(0, 0, 0);
-            int i = 0;
-            while (i < 255)
-            {
-                i++;
-                yield return new Color(i, i, i);
-            }
-            
-        }
-
-
-        protected IEnumerator<int> GetFunc()
-        {
-            foreach (var z in GetRandoms())
-            {
-                //for later
-                Console.WriteLine($"GetFunc:{z}");
-                yield return z;
-            }
-
-        }
-        protected IEnumerable<int> GetRandoms()
-        {
-            yield return 12;
-            yield return 16;
-            yield return 45;
-            yield return 37;
-            yield return 85;
-            yield return 34;
-            yield return 16;
-
-        }
+    
  
         protected void LoadContent()
         {
-            TestCoRoutine(); 
+    
             _viewportAdapter = new BoxingViewportAdapter(ScreenManager.Game.Window, ScreenManager.GraphicsDevice, 1280, 720);
             _camera = new Camera2D(_viewportAdapter);
 
             // create a panel and position in center of screen
             Panel panel = new Panel(new Vector2(400, 400), PanelSkin.Default, Anchor.Center);
             panel.Identifier = "Startup";
-            UserInterface.Active.AddEntity(panel);
+            
 
             // add title and text
             panel.AddChild(new Header("Rogue Squad AI Test"));
@@ -206,10 +154,10 @@ namespace RogueSquad.Client.Dx
             // add a button at the bottom
             panel.AddChild(btn);
 
-            panel.Visible = false;
+            panel.Visible = true;
+            UserInterface.Active.AddEntity(panel);
+             //CreateEditorWindow();
 
-           // CreateEditorWindow();
-            
 
             world = new World(ScreenManager.GraphicsDevice, this.Content, Engine.Instance.ScreenWidth, Engine.Instance.ScreenHeight);
             _camera.Zoom = 1.0f;
@@ -224,8 +172,7 @@ namespace RogueSquad.Client.Dx
             interpreter.RegisterCommand("EnableDebug", (x) => { world.EnableDebugRendering(); });
             interpreter.RegisterCommand("DisableDebug", (x) => { world.DisableDebugRendering(); });
             interpreter.RegisterCommand("Exit", (x) => { ScreenManager.Game.Exit(); });
-            //_trs = new TileRenderingSystem(ScreenManager.SpriteBatch, Content.Load<Texture2D>("Assets/grass"), Content.Load<Texture2D>("Assets/stone_tile"), Content.Load<SpriteFont>("Fonts/gamefont"));
-            // _trs.CreateMap(10, 10);
+ 
 
 
 
@@ -266,11 +213,7 @@ namespace RogueSquad.Client.Dx
                                                        bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, false);
-
-            if (!_coroutines.IsEmpty)
-            {
-                Console.WriteLine("Called Update");
-            }
+           
 
             // Gradually fade in or out depending on whether we are covered by the pause screen.
             if (coveredByOtherScreen)
@@ -285,15 +228,8 @@ namespace RogueSquad.Client.Dx
                 UserInterface.Active.Update(gameTime);                
                 world.Update(gameTime);
 
-                _coroutines.Update();
             }
 
-            //we can swap the color 
-            if (_coroutines.IsEmpty)
-            {
-                _coroutines.StartCoroutine(GetColor());
-                _fadeColor = Color.Black;
-            }
 
             
             

@@ -38,10 +38,10 @@ namespace RogueSquad.Core.Systems
             }
         }
 
-        private bool CanPatrol(AINode ai) => ai.PatrolData != null;
-        private bool CanFollow(AINode ai) => ai.FollowData != null;        
-        private bool ExitedPatrolArea(AINode ai) => !ai.PatrolData.PatrolArea.Contains(ai.CollisionData.BoundingRectangle.Center);
-        private bool IsAtPatrolStart(AINode ai) => ai.PatrolData.PatrolArea.Intersects(ai.CollisionData.BoundingRectangle);
+        private static bool CanPatrol(AINode ai) => ai.PatrolData != null;
+        private static bool CanFollow(AINode ai) => ai.FollowData != null;        
+        private static bool ExitedPatrolArea(AINode ai) => !ai.PatrolData.PatrolArea.Contains(ai.CollisionData.BoundingRectangle.Center);
+        private static bool IsAtPatrolStart(AINode ai) => ai.PatrolData.PatrolArea.Intersects(ai.CollisionData.BoundingRectangle);
 
         public void Update(GameTime gameTime)
         {

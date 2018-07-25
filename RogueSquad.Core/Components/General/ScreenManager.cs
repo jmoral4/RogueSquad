@@ -305,7 +305,7 @@ namespace RogueSquad.Core.Components.General
         /// <summary>
         /// Informs the screen manager to serialize its state to disk.
         /// </summary>
-        public void Deactivate()
+        public static void Deactivate()
         {
 #if !WINDOWS_PHONE
             return;
@@ -354,7 +354,7 @@ namespace RogueSquad.Core.Components.General
 #endif
         }
 
-        public bool Activate(bool instancePreserved)
+        public static bool Activate(bool instancePreserved)
         {
 #if !WINDOWS_PHONE
             return false;

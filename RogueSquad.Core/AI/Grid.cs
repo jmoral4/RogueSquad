@@ -17,7 +17,7 @@ namespace RogueSquad.Core.AI
         }
         public class Cell
         {
-            public Cell(int x, int y, float cellSize)
+            public Cell()
             {
 
             }
@@ -86,7 +86,7 @@ namespace RogueSquad.Core.AI
 
                     if (cell == null)
                     {
-                        cell = new Cell(ix, iy, CellSize);
+                        cell = new Cell();
                         Cells[ix, iy] = cell;
                     }
 

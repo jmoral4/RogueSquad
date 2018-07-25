@@ -28,8 +28,9 @@ namespace RogueSquad.Core
         EntityFactory _entityFactory;
 
         public ContentManager Content { get; set; }
-        int w = 1920;
-        int h = 1080;
+
+        readonly int w = 1920;
+        readonly int h = 1080;
         const int PLAYER_H = 96;
         const int PLAYER_W = 64;
         Camera2D _camera;
@@ -111,7 +112,7 @@ namespace RogueSquad.Core
             for (int i = 0; i < count; i++)
             {
                 var pos = new Vector2(r.Next(0, (64 * worldWidth) - 20), r.Next(0, (worldHeight * 32) - 20));
-                var enemy = eg.CreateOnScreenEntity("basic_enemy", pos, .14f);
+                var enemy = EntityGenerator.CreateOnScreenEntity("basic_enemy", pos, .14f);
                 CollidableComponent collider = enemy.GetComponentByType(ComponentTypes.CollidableComponent) as CollidableComponent;
                 //add some AI
                 var inf = r.Next(100, 400);
@@ -134,28 +135,14 @@ namespace RogueSquad.Core
                 var detectionRect = collider.BoundingRectangle;
                 detectionRect.Inflate(inf/2, inf/2);               
                 ai.DetectionArea = detectionRect;
-
                 ai.DetectionRange = detectionRect.Position - pos;
-
-                //ai.DetectionRadius = rect;
-                //ai.HasPatrolArea = r.Next(0, 100) > 40;
-
-
-                //if (ai.HasPatrolArea)
-                //{
-                //    var patrolRect = ai.DetectionRadius.ToRectangle();
-                //    patrolRect.Inflate(inf/2, inf/2);
-                //    ai.PatrolArea = patrolRect;
-                //}
+                
                 enemy.AddComponent(ai);
                 enemy.AddComponent(pc);
                 this.AddEntity(enemy);
             }
         }
 
-        //public void ApplyAIBehavior(RogueEntity target, AIBehavior behavior)
-        //{ }
-        
         public void EnableBasicSystems()
         {
             RegisterSystem(new GameplaySystem(this));
@@ -180,21 +167,21 @@ namespace RogueSquad.Core
                             IsWalkable = true,
                             TileType = MapTileTypes.Ground
                         },
-                                                new Tile
+                        new Tile
                         {
                             Name= "Sand2",
                             Texture = Content.Load<Texture2D>("Assets/sandtile2"),
                             IsWalkable = true,
                             TileType = MapTileTypes.Ground
                         },
-                                                                        new Tile
+                        new Tile
                         {
                             Name= "Sand3",
                             Texture = Content.Load<Texture2D>("Assets/sandtile3"),
                             IsWalkable = true,
                             TileType = MapTileTypes.Ground
                         },
-                                                                                                new Tile
+                        new Tile
                         {
                             Name= "Sand4",
                             Texture = Content.Load<Texture2D>("Assets/sandtile4"),
@@ -227,7 +214,7 @@ namespace RogueSquad.Core
                             IsWalkable = true,
                             TileType = MapTileTypes.Ground
                         },
-                                                new Tile
+                         new Tile
                         {
                             Name= "Sand2",
                             Texture = Content.Load<Texture2D>("Proto/Tiles"),
@@ -235,7 +222,7 @@ namespace RogueSquad.Core
                             IsWalkable = true,
                             TileType = MapTileTypes.Ground
                         },
-                                                                        new Tile
+                        new Tile
                         {
                             Name= "Sand3",
                             Texture = Content.Load<Texture2D>("Proto/Tiles"),
@@ -243,14 +230,15 @@ namespace RogueSquad.Core
                             IsWalkable = true,
                             TileType = MapTileTypes.Ground
                         },
-                                                                                                new Tile
+                        new Tile
                         {
                             Name= "Sand4",
                             Texture = Content.Load<Texture2D>("Proto/Tiles"),
                             Source= new Rectangle(768,0,256,128),
                             IsWalkable = true,
                             TileType = MapTileTypes.Ground
-                        }, new Tile
+                        },
+                        new Tile
                         {
                             Name= "Sand5",
                             Texture = Content.Load<Texture2D>("Proto/Tiles"),
@@ -335,7 +323,7 @@ namespace RogueSquad.Core
         }
 
 
-        private void AddEntityToSystems(RogueEntity entity, IEnumerable<IRogueSystem> systems)
+        private static void AddEntityToSystems(RogueEntity entity, IEnumerable<IRogueSystem> systems)
         {
             
             foreach (var sys in systems)

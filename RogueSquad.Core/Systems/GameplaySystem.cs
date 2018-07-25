@@ -70,7 +70,6 @@ namespace RogueSquad.Core.Systems
             return false;
         }
 
-        float aiSpeed = .14f; //move to position
         public void Update(GameTime gametime)
         {
 

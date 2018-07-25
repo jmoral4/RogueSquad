@@ -64,7 +64,7 @@ namespace RogueSquad.Core.Entities
             player.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(startLocation.X, startLocation.Y, 64, 96) });
             player.AddComponent(new BasicControllerComponent());
             player.AddComponent(new AIComponent { IsPlayerControlled = true });
-            player.AddComponent(new AnimationStateInfoComponent() { CurrentAnimationName = "idle_down" });
+            player.AddComponent(new AnimationStateInfoComponent { CurrentAnimationName = "idle_down" });
             return player;
         }
 
@@ -110,7 +110,7 @@ namespace RogueSquad.Core.Entities
             {
                 CurrentAnimation = "idle_down"
             });
-            ally.AddComponent(new AnimationStateInfoComponent() { CurrentAnimationName = "idle_down" });
+            ally.AddComponent(new AnimationStateInfoComponent { CurrentAnimationName = "idle_down" });
             
             return ally;
         }
@@ -144,7 +144,7 @@ namespace RogueSquad.Core.Entities
             player.AddComponent(new CollidableComponent { BoundingRectangle = new RectangleF(startLocation.X, startLocation.Y, 64, 96) });
             player.AddComponent(new BasicControllerComponent());
             player.AddComponent(new AIComponent { IsPlayerControlled = true });
-            player.AddComponent(new AnimationStateInfoComponent() { CurrentAnimationName = "idle_down" });
+            player.AddComponent(new AnimationStateInfoComponent { CurrentAnimationName = "idle_down" });
 
             return player;
         }

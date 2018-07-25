@@ -19,12 +19,10 @@ namespace RogueSquad.Client.Dx
     /// </summary>
     public class RogueSquadGame : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        GraphicsDeviceManager graphics;        
       
         int defaultBackBufferWidth = 1920;
-        int defaultBackBufferHeight = 1080;
-        int UpdatesPerSecond = 25;
+        int defaultBackBufferHeight = 1080;        
 
         ScreenManager screenManager;
         ScreenFactory screenFactory;

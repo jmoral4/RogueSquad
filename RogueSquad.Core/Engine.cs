@@ -91,7 +91,7 @@ namespace RogueSquad.Core
         {
             _content = content;
         }
-        public RogueEntity CreateOnScreenEntity(string entityType, Vector2 position, float speed)
+        public static RogueEntity CreateOnScreenEntity(string entityType, Vector2 position, float speed)
         {
             if (entityType == "basic_enemy" )
             {

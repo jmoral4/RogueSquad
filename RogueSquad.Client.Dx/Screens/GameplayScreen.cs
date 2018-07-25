@@ -40,10 +40,7 @@ namespace RogueSquad.Client.Dx
         FramesPerSecondCounter fps;
  
         KeyboardState previousKeyboardState;
-        KeyboardState currentKeyboardState;
-        MouseState previousMouseState;
-        MouseState currentMouseState;
-        double _elapsed;
+        KeyboardState currentKeyboardState;        
 
         Color _fadeColor = Color.Black;
 
@@ -104,9 +101,7 @@ namespace RogueSquad.Client.Dx
 
         private void CreateEditorWindow()
         {
-        
-
-
+ 
             Panel panel = new Panel(new Vector2(1024, 768), PanelSkin.Default, Anchor.Center);
             panel.Identifier = "Editor";
             Panel imgPanel = new Panel(new Vector2(150, 150), PanelSkin.Default, Anchor.AutoInline);            
@@ -123,8 +118,6 @@ namespace RogueSquad.Client.Dx
             btn.OnClick += (e) => { Console.WriteLine("clicked"); Entity en = e; en.Parent.Visible = false; };
             panel.AddChild(btn);
 
-
-            //tabs.AddChild(panel);
             UserInterface.Active.AddEntity(panel);
 
         }
@@ -132,21 +125,21 @@ namespace RogueSquad.Client.Dx
  
         protected void LoadContent()
         {
-    
             _viewportAdapter = new BoxingViewportAdapter(ScreenManager.Game.Window, ScreenManager.GraphicsDevice, 1280, 720);
             _camera = new Camera2D(_viewportAdapter);
 
             // create a panel and position in center of screen
-            Panel panel = new Panel(new Vector2(400, 400), PanelSkin.Default, Anchor.Center);
-            panel.Identifier = "Startup";
-            
+            Panel panel = new Panel(new Vector2(400, 400), PanelSkin.Default, Anchor.Center)
+            {
+                Identifier = "Startup"
+            };
+
 
             // add title and text
             panel.AddChild(new Header("Rogue Squad AI Test"));
             panel.AddChild(new HorizontalLine());
             panel.AddChild(new Paragraph("Simple AI Test"));
 
-            //var tx = Content.Load<Texture2D>("Textures/ro");
 
             var btn = new GeonBit.UI.Entities.Button("Close", ButtonSkin.Default, Anchor.BottomCenter);
             btn.OnClick += (e) => { Console.WriteLine("clicked"); Entity en = e; en.Parent.Visible = false; };
@@ -156,9 +149,8 @@ namespace RogueSquad.Client.Dx
 
             panel.Visible = true;
             UserInterface.Active.AddEntity(panel);
-             //CreateEditorWindow();
-
-
+            //CreateEditorWindow();
+        
             world = new World(ScreenManager.GraphicsDevice, this.Content, Engine.Instance.ScreenWidth, Engine.Instance.ScreenHeight);
             _camera.Zoom = 1.0f;
             world.AttachCamera(_camera, _viewportAdapter);
@@ -172,13 +164,9 @@ namespace RogueSquad.Client.Dx
             interpreter.RegisterCommand("EnableDebug", (x) => { world.EnableDebugRendering(); });
             interpreter.RegisterCommand("DisableDebug", (x) => { world.DisableDebugRendering(); });
             interpreter.RegisterCommand("Exit", (x) => { ScreenManager.Game.Exit(); });
- 
-
-
-
         }
 
-        
+
 
 
 
@@ -229,9 +217,6 @@ namespace RogueSquad.Client.Dx
                 world.Update(gameTime);
 
             }
-
-
-            
             
         }
 
@@ -308,7 +293,6 @@ namespace RogueSquad.Client.Dx
         public override void Draw(GameTime gameTime)
         {
 
-            //_camera = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, 256, 128);
             ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,
                 Color.Red, 0, 0);
             ScreenManager.Game.Window.Title = "Fps:" + fps.FramesPerSecond + " Entities: " + world.EntityCount;
@@ -320,7 +304,6 @@ namespace RogueSquad.Client.Dx
 
             ScreenManager.Game.Window.Title = "Fps:" + fps.FramesPerSecond + " Entities: " + world.EntityCount;
             fps.Draw(gameTime);
-            //_trs.Draw(gameTime);
 
             world.Draw(gameTime);            
 

@@ -8,11 +8,11 @@ Rogue squad, like many of my projects, was hacked together in a few intense days
 At it's core, the model of Systems, Components, Entities, and Nodes are sound and I've been able to attach them together in a variety of ways to create new features.
 
 ## Getting Started / Building
-Step 1: Download or pull from Git. 
-Step 2: Unzip the res/Content.7z to the /Content directory of either the DX or CrossPlatform project (or both)
-Step 3: Build!
+- Step 1: Download or pull from Git. 
+- Step 2: Unzip the res/Content.7z to the /Content directory of either the DX or CrossPlatform project (or both)
+- Step 3: Build!
 
-### About Fonts
+## About Fonts
 If you have any build errors related to /Content/Fonts/gamefont.spritefont or /Fonts/menufont.spritefont, open them up and make sure the font name is one supported by your system. You can try using Verdana which worked on my MAC/OSX build. 
 
 ## Next Up

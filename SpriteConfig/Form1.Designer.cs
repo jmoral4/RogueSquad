@@ -41,23 +41,10 @@ namespace SpriteConfig
             this.lblEditing = new System.Windows.Forms.Label();
             this.pnlGfx = new System.Windows.Forms.Panel();
             this.gTimer = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtWidth = new System.Windows.Forms.TextBox();
-            this.txtHeight = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.pnlAnimatedSprite = new System.Windows.Forms.Panel();
-            this.txtFrames = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtStartFrame = new System.Windows.Forms.TextBox();
-            this.lblMaxFrames = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txtRow = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.txtFPS = new System.Windows.Forms.TextBox();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.lblFrame = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -86,20 +73,21 @@ namespace SpriteConfig
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(158, 34);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(158, 34);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.saveToolStripMenuItem.Text = "&Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(158, 34);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -131,40 +119,6 @@ namespace SpriteConfig
             this.gTimer.Interval = 30;
             this.gTimer.Tick += new System.EventHandler(this.GTimer_Tick);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(430, 60);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(90, 20);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Frame Size";
-            // 
-            // txtWidth
-            // 
-            this.txtWidth.Location = new System.Drawing.Point(434, 85);
-            this.txtWidth.Name = "txtWidth";
-            this.txtWidth.Size = new System.Drawing.Size(43, 26);
-            this.txtWidth.TabIndex = 4;
-            this.txtWidth.Text = "84";
-            // 
-            // txtHeight
-            // 
-            this.txtHeight.Location = new System.Drawing.Point(508, 85);
-            this.txtHeight.Name = "txtHeight";
-            this.txtHeight.Size = new System.Drawing.Size(43, 26);
-            this.txtHeight.TabIndex = 5;
-            this.txtHeight.Text = "84";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(483, 89);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(20, 20);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "X";
-            // 
             // pnlAnimatedSprite
             // 
             this.pnlAnimatedSprite.Location = new System.Drawing.Point(16, 395);
@@ -172,133 +126,37 @@ namespace SpriteConfig
             this.pnlAnimatedSprite.Size = new System.Drawing.Size(406, 322);
             this.pnlAnimatedSprite.TabIndex = 3;
             // 
-            // txtFrames
-            // 
-            this.txtFrames.Location = new System.Drawing.Point(594, 85);
-            this.txtFrames.Name = "txtFrames";
-            this.txtFrames.Size = new System.Drawing.Size(100, 26);
-            this.txtFrames.TabIndex = 7;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(590, 60);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(102, 20);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Frame Count";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(728, 85);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(240, 24);
-            this.checkBox1.TabIndex = 9;
-            this.checkBox1.Text = "Vertical Instead of Horizontal";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(430, 132);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(94, 20);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "Start Frame";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // txtStartFrame
-            // 
-            this.txtStartFrame.Location = new System.Drawing.Point(434, 157);
-            this.txtStartFrame.Name = "txtStartFrame";
-            this.txtStartFrame.Size = new System.Drawing.Size(68, 26);
-            this.txtStartFrame.TabIndex = 10;
-            this.txtStartFrame.Text = "0";
-            // 
-            // lblMaxFrames
-            // 
-            this.lblMaxFrames.AutoSize = true;
-            this.lblMaxFrames.Location = new System.Drawing.Point(530, 132);
-            this.lblMaxFrames.Name = "lblMaxFrames";
-            this.lblMaxFrames.Size = new System.Drawing.Size(17, 20);
-            this.lblMaxFrames.TabIndex = 12;
-            this.lblMaxFrames.Text = "[]";
-            this.lblMaxFrames.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(592, 132);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(41, 20);
-            this.label5.TabIndex = 14;
-            this.label5.Text = "Row";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // txtRow
-            // 
-            this.txtRow.Location = new System.Drawing.Point(596, 157);
-            this.txtRow.Name = "txtRow";
-            this.txtRow.Size = new System.Drawing.Size(100, 26);
-            this.txtRow.TabIndex = 13;
-            this.txtRow.Text = "0";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(435, 218);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(150, 20);
-            this.label6.TabIndex = 16;
-            this.label6.Text = "Frames Per Second";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // txtFPS
-            // 
-            this.txtFPS.Location = new System.Drawing.Point(438, 243);
-            this.txtFPS.Name = "txtFPS";
-            this.txtFPS.Size = new System.Drawing.Size(100, 26);
-            this.txtFPS.TabIndex = 15;
-            this.txtFPS.Text = "15";
-            // 
             // propertyGrid1
             // 
-            this.propertyGrid1.Location = new System.Drawing.Point(434, 277);
+            this.propertyGrid1.Location = new System.Drawing.Point(429, 60);
             this.propertyGrid1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(600, 462);
+            this.propertyGrid1.Size = new System.Drawing.Size(481, 657);
             this.propertyGrid1.TabIndex = 1;
             this.propertyGrid1.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PropertyGrid1_PropertyValueChanged);
+            // 
+            // lblFrame
+            // 
+            this.lblFrame.AutoSize = true;
+            this.lblFrame.Location = new System.Drawing.Point(14, 720);
+            this.lblFrame.Name = "lblFrame";
+            this.lblFrame.Size = new System.Drawing.Size(0, 20);
+            this.lblFrame.TabIndex = 4;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1154, 775);
+            this.Controls.Add(this.lblFrame);
             this.Controls.Add(this.propertyGrid1);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.txtFPS);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.txtRow);
-            this.Controls.Add(this.lblMaxFrames);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.txtStartFrame);
-            this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.txtFrames);
             this.Controls.Add(this.pnlAnimatedSprite);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.txtHeight);
-            this.Controls.Add(this.txtWidth);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.pnlGfx);
             this.Controls.Add(this.lblEditing);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "pan";
+            this.Text = "SpriteConfig";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -317,24 +175,11 @@ namespace SpriteConfig
         private System.Windows.Forms.Label lblEditing;
         private System.Windows.Forms.Panel pnlGfx;
         private System.Windows.Forms.Timer gTimer;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtWidth;
-        private System.Windows.Forms.TextBox txtHeight;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel pnlAnimatedSprite;
-        private System.Windows.Forms.TextBox txtFrames;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txtStartFrame;
-        private System.Windows.Forms.Label lblMaxFrames;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txtRow;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox txtFPS;
         private PropertyGrid propertyGrid1;
         private FolderBrowserDialog folderBrowserDialog1;
+        private Label lblFrame;
     }
 }
 

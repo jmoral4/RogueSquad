@@ -32,6 +32,11 @@ namespace RogueSquadGL
             // TODO: use this.Content to load your game content here
         }
 
+        protected override void UnloadContent()
+        {
+            spriteBatch.Dispose();
+        }
+
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -46,7 +51,7 @@ namespace RogueSquadGL
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             spriteBatch.Draw(testSprite, Vector2.One, Color.White);
             spriteBatch.End();
 

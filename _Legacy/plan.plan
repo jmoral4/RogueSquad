@@ -1,0 +1,13 @@
+
+
+There are a few outstanding issues I'd like to resolve which I think will improve the architecture.
+
+
+1. When attempting to add animated sprites to AI players I found that it was impossible. 
+    Animations would not play because they are tied to the BasicControllingSystem which toggles them and then sets them in GameplaySystem
+    
+2. AI should be following in a rubber-band like manner. I should look at adding a tween of some sort to the vector follow logic
+
+3. When adding 600+ entities to the scene performance slowed to a crawl on my GTX980
+    I suspect this is primarily due to the number of overlapping collision detection calls.
+    I also suspect that the sloppy adding of features near the end of my hack session have left some less than optimal call paths which are allocating every frame.

@@ -11,6 +11,7 @@ namespace RogueSquad
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Texture2D testSprite;
         
         public Game1()
         {
@@ -39,6 +40,7 @@ namespace RogueSquad
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            testSprite = Content.Load<Texture2D>("textures/ro");
 
             // TODO: use this.Content to load your game content here
         }
@@ -75,6 +77,9 @@ namespace RogueSquad
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            spriteBatch.Begin();
+            spriteBatch.Draw(testSprite, Vector2.One, Color.White);
+            spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);

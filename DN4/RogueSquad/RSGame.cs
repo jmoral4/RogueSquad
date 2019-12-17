@@ -10,7 +10,7 @@ namespace RogueSquad
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class RSGame : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -37,7 +37,7 @@ namespace RogueSquad
 
         List<ControllableCharacter> _allUnits;
 
-        public Game1()
+        public RSGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";

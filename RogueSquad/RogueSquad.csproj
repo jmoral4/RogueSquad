@@ -8,6 +8,7 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <Version>0.0.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Content\obj\**" />

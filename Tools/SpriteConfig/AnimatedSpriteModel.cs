@@ -6,19 +6,24 @@ namespace SpriteConfig
 {
     // This class is used for runtime configuration of the animated sprite data
     // frames, start/stop, aspect ratio? , framecounter, maxframes, 
-    public class AnimatedSpriteInfo 
-    {
-        public int version { get; set; } = 1;
+    public class AnimatedSpriteModel 
+    {        
+        [Description("The name you will use to reference this animation.")]
         public string AnimationName { get; set; }
+        [Description("The filename of the source image")]
         public string SourceFileName { get; }
+        [Description("The full path of the source image")]
         public string SourceFullPath { get; }
+        [Description("The width of the source file.")]
         public int SourceWidth { get; }
+        [Description("The height of the source file.")]
         public int SourceHeight { get; }
-        public string AnimatedSpriteFilename { get; set; } = string.Empty;
-        public string AnimatedSpriteFullPath { get; set; } = string.Empty;
-
+        [Description("The name of this file when saved.")]
+        public string AnimatedSpriteFilename { get; set; } = string.Empty;                        
+        [Description("The first frame to be used in the image (starting from 0) calculated using the FameWidth, FrameHeight, and Row.")]
         public int FirstFrame { get; set; } 
         private int _lastFrame { get; set; }
+        [Description("The last Frame to be used in the animation (calculated using the FrameWidth, FrameHeight, and Row). Defaults to the max of this calculated value.")]
         public int LastFrame 
         {
             get { return _lastFrame; }  
@@ -26,7 +31,8 @@ namespace SpriteConfig
                 _lastFrame = value;
                 SaveValidateAndUpdate();
             } 
-        } 
+        }
+        [Description("The width of an individual frame of this animation.")]
         public int FrameWidth
         {
             get { return _frameWidth; }
@@ -37,6 +43,7 @@ namespace SpriteConfig
             }
         }
         private int _frameWidth;
+        [Description("The height of an individual frame of this animaiton.")]
         public int FrameHeight 
         {
             get { return _frameHeight; }
@@ -50,8 +57,11 @@ namespace SpriteConfig
             
         private int _maxFrameHeight;
         private int _maxFrameWidth;
-        public int FrameRow { get; set; } 
+        [Description("The row that this animation starts at (for multi-row sheets)")]
+        public int FrameRow { get; set; }
+        [Description("The desired playback speed (for viewing in-app only, value is exported but has to be implemented manually)")]
         public int DesiredFrameRate { get; set; }  //in fps 
+        [Description("Rectanble representing the current Frame being rendered")]
         protected Rectangle CurrentFrame { get; set; }
 
 
@@ -80,7 +90,7 @@ namespace SpriteConfig
              
         }
 
-        public AnimatedSpriteInfo(string srcFilename, string srcFullPath, int srcWidth, int srcHeight)
+        public AnimatedSpriteModel(string srcFilename, string srcFullPath, int srcWidth, int srcHeight)
         {
             SourceHeight = srcHeight;
             _maxFrameHeight = SourceHeight;

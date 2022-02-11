@@ -4,95 +4,87 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
+using MonoGame.Extended.Animations;
+using MonoGame.Extended.Animations.SpriteSheets;
+using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.TextureAtlases;
+
 using RogueSquadLib.BaseServices;
+using Microsoft.Xna.Framework.Media;
+using RogueSquadLib.Entities;
+using RogueSquadLib.Core.Screens;
+using RogueSquadLib.Util;
+using System;
+using RogueSquadLib.Screens;
+using System.Diagnostics;
 
 namespace RogueSquadLib
 {
-    public class Engine : Game
-    {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-        private Texture2D _testTexture;
-        private OrthographicCamera _camera;
+    public class Engine : Microsoft.Xna.Framework.Game
+    {        
+        ScreenManager screenManager;
+        ScreenFactory screenFactory;
 
+        private GraphicsDeviceManager _graphics;
+        
         public Engine()
         {
             _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            Content.RootDirectory = "Content";
+            screenFactory = new ScreenFactory();
+            Services.AddService(typeof(IScreenFactory), screenFactory);
+            screenManager = new ScreenManager(this);
+            Components.Add(screenManager);
+            AddInitialScreens();           
         }
 
         protected override void Initialize()
         {
+            IniReader reader = new IniReader("AI.ini");
+            // TODO: IMPORTANT!: Add error handling here of course
+            var desiredHeight = reader.GetValue("resolution_height", "settings");
+            var desiredWidth = reader.GetValue("resolution_width", "settings");
+
             // TODO: Add your initialization logic here
-            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1080);            
-            _camera = new OrthographicCamera(viewportAdapter);
+            // IMPORTANT!: The window size change _has_ to be in init or later. Otherwise it has no effect. Spent way too many minutes wondering why the window wasn't re-sizing when i had the code in the ctor
+            _graphics.PreferredBackBufferHeight = Int32.Parse(desiredHeight);
+            _graphics.PreferredBackBufferWidth = Int32.Parse(desiredWidth);
+            _graphics.SynchronizeWithVerticalRetrace = true;
+            _graphics.ApplyChanges();
+
             base.Initialize();
         }
 
-        protected override void LoadContent()
+        private void AddInitialScreens()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            _testTexture = Content.Load<Texture2D>("Characters/Enemies/sorcerer attack_Animation 1_0");
-            OSInfo.Instance.DebugListAllStats();
-            // TODO: use this.Content to load your game content here
+            // Activate the first screens.
+            screenManager.AddScreen(new BackgroundScreen(), null);
+            screenManager.AddScreen(new MainMenuScreen(), null);
+            //screenManager.AddScreen(new AITestBed(), null);
         }
 
+        protected override void LoadContent()
+        {           
+        }
+       
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            // TODO: Add your update logic here
-
-
-            var keyboardState = Keyboard.GetState();
-            const float movementSpeed = 100;
-
-            var deltaTime = 0.1f;
-
-            if (keyboardState.IsKeyDown(Keys.W))
-                _camera.Move(new Vector2(0, -movementSpeed) * -deltaTime);
-            // TODO: Add your update logic here
-
-            if (keyboardState.IsKeyDown(Keys.S))
-                _camera.Move(new Vector2(0, -movementSpeed) * deltaTime);
-
-            if (keyboardState.IsKeyDown(Keys.A))
-                _camera.Move(new Vector2(movementSpeed, 0) * deltaTime);
-
-
-            if (keyboardState.IsKeyDown(Keys.D))
-                _camera.Move(new Vector2(-movementSpeed, 0) * deltaTime);
-
-            if (keyboardState.IsKeyDown(Keys.LeftAlt) && keyboardState.IsKeyDown(Keys.Enter))
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape) && Keyboard.GetState().IsKeyDown(Keys.L))
             {
-               // ToggleFullScreenWindowed();
+                Debug.WriteLine("Master Exit Triggered: Escape + L");
+                Exit();
             }
-            
-            // this is an example of getting the screen world coodinates (i.e., when our viewerport is 1080p but physically 800xwhatever)
-            var mouseState = Mouse.GetState();
-            //_worldPosition = _camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y));                       
+
 
             base.Update(gameTime);
         }
 
-
-
         protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            var transformMatrix = _camera.GetViewMatrix();
-            _spriteBatch.Begin(transformMatrix: transformMatrix);
-            _spriteBatch.Draw(_testTexture, Vector2.One, Color.White);
-            _spriteBatch.End();
-
-            
-            // TODO: Add your drawing code here
-
+        {            
             base.Draw(gameTime);
         }
+
+        
     }
 }

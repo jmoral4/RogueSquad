@@ -18,7 +18,7 @@ namespace SpriteConfig
     {
      
         AppState _appState;
-        AnimatedSpriteInfo _animatedSpriteInfo;
+        AnimatedSpriteModel _currentAnimatedSpriteModel;
         Image _spriteBitmap;
         // move most of this stuff into a spriteInfo or SpriteConfig class
         BufferedGraphics _bufferedAnimatedSprite;
@@ -27,6 +27,7 @@ namespace SpriteConfig
         float _rectWRatio = 1.0f; // the scaling ratio for the 'original sprite' box - used when drawing overlays in the sprite box
         float _rectHRatio = 1.0f;
         int _currentFrameCounter = 0;
+        List<AnimatedSpriteModel> _animatedSpriteModels = new List<AnimatedSpriteModel>();
         
 
         public Form1()
@@ -61,26 +62,26 @@ namespace SpriteConfig
                 // load the image
                 _spriteBitmap = Image.FromFile(ofd.FileName);
 
-                _animatedSpriteInfo = new AnimatedSpriteInfo(ofd.FileName, ofd.SafeFileName, _spriteBitmap.Width, _spriteBitmap.Height); //re initialize on every new load..
+                _currentAnimatedSpriteModel = new AnimatedSpriteModel(ofd.SafeFileName, ofd.FileName, _spriteBitmap.Width, _spriteBitmap.Height); //re initialize on every new load..
 
                 //update stats
                 //estimated framecount based on above
-                _animatedSpriteInfo.LastFrame = (_animatedSpriteInfo.SourceWidth / _animatedSpriteInfo.FrameWidth);
-                gTimer.Interval = 1000 / _animatedSpriteInfo.DesiredFrameRate;
+                _currentAnimatedSpriteModel.LastFrame = (_currentAnimatedSpriteModel.SourceWidth / _currentAnimatedSpriteModel.FrameWidth);
+                gTimer.Interval = 1000 / _currentAnimatedSpriteModel.DesiredFrameRate;
 
                 // generate ratios for rendering overlay on source file (since it's scaled)
-                _rectWRatio = (float)(pnlGfx.Width) / (float)_animatedSpriteInfo.SourceWidth;
-                _rectHRatio = (float)pnlGfx.Height / (float)_animatedSpriteInfo.SourceHeight;
+                _rectWRatio = (float)(pnlGfx.Width) / (float)_currentAnimatedSpriteModel.SourceWidth;
+                _rectHRatio = (float)pnlGfx.Height / (float)_currentAnimatedSpriteModel.SourceHeight;
 
                 //setup and bind our property grid             
-                propertyGrid1.SelectedObject = _animatedSpriteInfo;
+                propertyGrid1.SelectedObject = _currentAnimatedSpriteModel;
                 propertyGrid1.Enabled = true;
                 propertyGrid1.Visible = true;
                 propertyGrid1.Name = "Animated Sprite Info";
 
 
                 // update the name of the file we're editing
-                lblEditing.Text = $"Editing: {_animatedSpriteInfo.SourceFullPath} + {_animatedSpriteInfo.SourceFileName}";
+                lblEditing.Text = $"Editing: {_currentAnimatedSpriteModel.SourceFullPath} + {_currentAnimatedSpriteModel.SourceFileName}";
 
                 gTimer.Enabled = true;
                 _appState.ParentSpriteLoaded = true;
@@ -89,14 +90,20 @@ namespace SpriteConfig
 
         }
 
+        private void NewAnimatedSpriteModel()
+        { 
+        
+        }
+
+
 
         private RectangleF GetScaledFrameRectangle()
         {
             return new RectangleF(
-                _animatedSpriteInfo.GetCurrentFrame().X * _rectWRatio,
-                _animatedSpriteInfo.GetCurrentFrame().Y * _rectHRatio,
-                _animatedSpriteInfo.FrameWidth * _rectWRatio,
-                _animatedSpriteInfo.FrameHeight * _rectHRatio
+                _currentAnimatedSpriteModel.GetCurrentFrame().X * _rectWRatio,
+                _currentAnimatedSpriteModel.GetCurrentFrame().Y * _rectHRatio,
+                _currentAnimatedSpriteModel.FrameWidth * _rectWRatio,
+                _currentAnimatedSpriteModel.FrameHeight * _rectHRatio
                 );
         }
 
@@ -123,23 +130,23 @@ namespace SpriteConfig
                 _bufferedAnimatedSprite.Graphics.Clear(Color.White);
 
                 //update the current frame it it's different
-                _animatedSpriteInfo.UpdateCurrentFrame(
+                _currentAnimatedSpriteModel.UpdateCurrentFrame(
                    new Rectangle(
-                       _currentFrameCounter * _animatedSpriteInfo.FrameWidth,
-                       _animatedSpriteInfo.FrameRow * _animatedSpriteInfo.FrameHeight,
-                       _animatedSpriteInfo.FrameWidth,
-                       _animatedSpriteInfo.FrameHeight));
+                       _currentFrameCounter * _currentAnimatedSpriteModel.FrameWidth,
+                       _currentAnimatedSpriteModel.FrameRow * _currentAnimatedSpriteModel.FrameHeight,
+                       _currentAnimatedSpriteModel.FrameWidth,
+                       _currentAnimatedSpriteModel.FrameHeight));
                 _bufferedOriginalFile.Graphics.DrawRectangles(Pens.Green, new RectangleF[] { GetScaledFrameRectangle() });
-                _bufferedAnimatedSprite.Graphics.DrawImage(_spriteBitmap, pnlAnimatedSprite.DisplayRectangle, _animatedSpriteInfo.GetCurrentFrame(), GraphicsUnit.Pixel);
+                _bufferedAnimatedSprite.Graphics.DrawImage(_spriteBitmap, pnlAnimatedSprite.DisplayRectangle, _currentAnimatedSpriteModel.GetCurrentFrame(), GraphicsUnit.Pixel);
                 _bufferedAnimatedSprite.Render();
                 _bufferedOriginalFile.Render();
                 
                 _currentFrameCounter++;
                 lblFrame.Text = "Frame: " + _currentFrameCounter;
 
-                if (_currentFrameCounter >= _animatedSpriteInfo.LastFrame)
+                if (_currentFrameCounter >= _currentAnimatedSpriteModel.LastFrame)
                 {
-                    _currentFrameCounter = _animatedSpriteInfo.FirstFrame;
+                    _currentFrameCounter = _currentAnimatedSpriteModel.FirstFrame;
                 }
                 
                 DrawPlayButtonContents();
@@ -169,7 +176,7 @@ namespace SpriteConfig
                 }
                 catch (Exception)
                 {
-                    _animatedSpriteInfo.DesiredFrameRate = (int)e.OldValue;
+                    _currentAnimatedSpriteModel.DesiredFrameRate = (int)e.OldValue;
                 }
             }
 
@@ -192,18 +199,18 @@ namespace SpriteConfig
             if (!_appState.ParentSpriteLoaded)
                 return;
 
-            string output = JsonConvert.SerializeObject(_animatedSpriteInfo);
+            string output = JsonConvert.SerializeObject(_currentAnimatedSpriteModel, Formatting.Indented);
 
             SaveFileDialog sfd = new SaveFileDialog();
-            sfd.FileName = _animatedSpriteInfo.AnimatedSpriteFilename;
+            sfd.FileName = _currentAnimatedSpriteModel.AnimatedSpriteFilename;
             sfd.Title = "Save Animation Configuration";
             sfd.DefaultExt = ".sfx";
 
             DialogResult dr = sfd.ShowDialog();
             if (dr == DialogResult.OK)
             {
-                _animatedSpriteInfo.AnimatedSpriteFilename = sfd.FileName;
-                File.WriteAllText(_animatedSpriteInfo.AnimatedSpriteFilename, output);
+                _currentAnimatedSpriteModel.AnimatedSpriteFilename = sfd.FileName;
+                File.WriteAllText(_currentAnimatedSpriteModel.AnimatedSpriteFilename, output);
                 _appState.IsSaved = true;
             }
 
@@ -237,6 +244,41 @@ namespace SpriteConfig
             if (!gTimer.Enabled)
             {
                 RenderFrame();
+            }
+        }
+
+        private void addAnimationButton_Click(object sender, EventArgs e)
+        {
+            //first see if we already have it in our list.
+            if (_animatedSpriteModels.Contains(_currentAnimatedSpriteModel))
+            {
+                MessageBox.Show("Model already exists in list.");
+            }
+            else
+            {
+                _animatedSpriteModels.Add(_currentAnimatedSpriteModel);
+                animationsListBox.Items.Add(_currentAnimatedSpriteModel.AnimationName);
+                _currentAnimatedSpriteModel = new AnimatedSpriteModel(_currentAnimatedSpriteModel.SourceFileName, _currentAnimatedSpriteModel.SourceFullPath, _currentAnimatedSpriteModel.SourceWidth, _currentAnimatedSpriteModel.SourceHeight);
+                propertyGrid1.SelectedObject = _currentAnimatedSpriteModel;
+            }
+        }
+
+        private void removeAnimation_Click(object sender, EventArgs e)
+        {
+            _animatedSpriteModels.Remove(_currentAnimatedSpriteModel);
+            animationsListBox.Items.Remove(_currentAnimatedSpriteModel.AnimationName);
+        }
+
+        private void animationsListBox_Click(object sender, EventArgs e)
+        {
+            var animationName = animationsListBox.SelectedItem as string;
+            if (!String.IsNullOrEmpty(animationName))
+            {
+                  var toBeSelected= _animatedSpriteModels.Where(x => x.AnimationName == animationName).FirstOrDefault();
+                if (toBeSelected != null)
+                {
+                    _currentAnimatedSpriteModel = toBeSelected;
+                }
             }
         }
     }

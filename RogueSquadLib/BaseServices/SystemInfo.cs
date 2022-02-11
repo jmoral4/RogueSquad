@@ -90,6 +90,15 @@ namespace RogueSquadLib.BaseServices
         }
     }
 
-
+    public static class VersionInfo
+    {
+        public static string GetVersionString()
+        {
+            Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            DateTime buildDate = new DateTime(2000, 1, 1)
+                                    .AddDays(version.Build).AddSeconds(version.Revision * 2);
+            return $"{version} ({buildDate})";
+        }
+    }
 
 }

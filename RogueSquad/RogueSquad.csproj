@@ -1,20 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
+	  <AssemblyVersion>1.0.*</AssemblyVersion>
+	  <Deterministic>false</Deterministic>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
-    <Version>0.0.0.1</Version>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Content\obj\**" />
-    <EmbeddedResource Remove="Content\obj\**" />
-    <None Remove="Content\obj\**" />
-  </ItemGroup>
   <ItemGroup>
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
@@ -35,5 +31,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RogueSquadLib\RogueSquadLib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="AI.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

@@ -45,9 +45,12 @@ namespace SpriteConfig
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.lblFrame = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.animationsListBox = new System.Windows.Forms.ListBox();
             this.btnPlay = new System.Windows.Forms.Button();
             this.btnStepSingle = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.addAnimationButton = new System.Windows.Forms.Button();
+            this.removeAnimation = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,7 +63,7 @@ namespace SpriteConfig
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
-            this.menuStrip1.Size = new System.Drawing.Size(978, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1037, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -77,29 +80,29 @@ namespace SpriteConfig
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
-            this.openToolStripMenuItem.Text = "&Open";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.openToolStripMenuItem.Text = "&Open Texture";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(43, 22);
-            this.newToolStripMenuItem.Text = "&New";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(90, 22);
+            this.newToolStripMenuItem.Text = "&New Window";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
             // 
             // lblEditing
@@ -114,11 +117,13 @@ namespace SpriteConfig
             // 
             // pnlGfx
             // 
+            this.pnlGfx.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlGfx.Location = new System.Drawing.Point(0, 483);
             this.pnlGfx.Margin = new System.Windows.Forms.Padding(2);
             this.pnlGfx.Name = "pnlGfx";
-            this.pnlGfx.Size = new System.Drawing.Size(842, 341);
+            this.pnlGfx.Size = new System.Drawing.Size(929, 341);
             this.pnlGfx.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.pnlGfx, "Sprite Sheet");
             // 
             // gTimer
             // 
@@ -132,12 +137,16 @@ namespace SpriteConfig
             this.pnlAnimatedSprite.Name = "pnlAnimatedSprite";
             this.pnlAnimatedSprite.Size = new System.Drawing.Size(271, 209);
             this.pnlAnimatedSprite.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.pnlAnimatedSprite, "Preview");
             // 
             // propertyGrid1
             // 
+            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid1.Location = new System.Drawing.Point(286, 39);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(321, 427);
+            this.propertyGrid1.Size = new System.Drawing.Size(380, 427);
             this.propertyGrid1.TabIndex = 1;
             this.propertyGrid1.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PropertyGrid1_PropertyValueChanged);
             // 
@@ -150,13 +159,14 @@ namespace SpriteConfig
             this.lblFrame.Size = new System.Drawing.Size(0, 13);
             this.lblFrame.TabIndex = 4;
             // 
-            // listBox1
+            // animationsListBox
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(613, 65);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(229, 407);
-            this.listBox1.TabIndex = 5;
+            this.animationsListBox.FormattingEnabled = true;
+            this.animationsListBox.Location = new System.Drawing.Point(717, 65);
+            this.animationsListBox.Name = "animationsListBox";
+            this.animationsListBox.Size = new System.Drawing.Size(212, 407);
+            this.animationsListBox.TabIndex = 5;
+            this.animationsListBox.Click += new System.EventHandler(this.animationsListBox_Click);
             // 
             // btnPlay
             // 
@@ -166,6 +176,7 @@ namespace SpriteConfig
             this.btnPlay.Size = new System.Drawing.Size(223, 23);
             this.btnPlay.TabIndex = 7;
             this.btnPlay.Text = "u ";
+            this.toolTip1.SetToolTip(this.btnPlay, "Play");
             this.btnPlay.UseVisualStyleBackColor = true;
             this.btnPlay.Visible = false;
             this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
@@ -178,18 +189,45 @@ namespace SpriteConfig
             this.btnStepSingle.Size = new System.Drawing.Size(39, 23);
             this.btnStepSingle.TabIndex = 3;
             this.btnStepSingle.Text = "g";
+            this.toolTip1.SetToolTip(this.btnStepSingle, "Step Single");
             this.btnStepSingle.UseVisualStyleBackColor = true;
             this.btnStepSingle.Visible = false;
             this.btnStepSingle.Click += new System.EventHandler(this.btnStepSingle_Click);
+            // 
+            // addAnimationButton
+            // 
+            this.addAnimationButton.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addAnimationButton.Location = new System.Drawing.Point(672, 152);
+            this.addAnimationButton.Name = "addAnimationButton";
+            this.addAnimationButton.Size = new System.Drawing.Size(39, 38);
+            this.addAnimationButton.TabIndex = 8;
+            this.addAnimationButton.Text = "+";
+            this.toolTip1.SetToolTip(this.addAnimationButton, "Play");
+            this.addAnimationButton.UseVisualStyleBackColor = true;
+            this.addAnimationButton.Click += new System.EventHandler(this.addAnimationButton_Click);
+            // 
+            // removeAnimation
+            // 
+            this.removeAnimation.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.removeAnimation.Location = new System.Drawing.Point(672, 196);
+            this.removeAnimation.Name = "removeAnimation";
+            this.removeAnimation.Size = new System.Drawing.Size(39, 38);
+            this.removeAnimation.TabIndex = 9;
+            this.removeAnimation.Text = "-";
+            this.toolTip1.SetToolTip(this.removeAnimation, "Play");
+            this.removeAnimation.UseVisualStyleBackColor = true;
+            this.removeAnimation.Click += new System.EventHandler(this.removeAnimation_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(978, 891);
+            this.ClientSize = new System.Drawing.Size(1037, 891);
+            this.Controls.Add(this.removeAnimation);
+            this.Controls.Add(this.addAnimationButton);
             this.Controls.Add(this.btnStepSingle);
             this.Controls.Add(this.btnPlay);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.animationsListBox);
             this.Controls.Add(this.lblFrame);
             this.Controls.Add(this.propertyGrid1);
             this.Controls.Add(this.pnlAnimatedSprite);
@@ -223,9 +261,12 @@ namespace SpriteConfig
         private PropertyGrid propertyGrid1;
         private FolderBrowserDialog folderBrowserDialog1;
         private Label lblFrame;
-        private ListBox listBox1;
+        private ListBox animationsListBox;
         private Button btnPlay;
         private Button btnStepSingle;
+        private ToolTip toolTip1;
+        private Button addAnimationButton;
+        private Button removeAnimation;
     }
 }
 

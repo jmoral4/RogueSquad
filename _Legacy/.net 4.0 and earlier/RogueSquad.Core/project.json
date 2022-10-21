@@ -1,0 +1,20 @@
+﻿{
+  "supports": {
+    "net46.app": {},
+    "uwp.10.0.app": {}
+  },
+  "dependencies": {
+    "Microsoft.NETCore": "5.0.0",
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.0",
+    "MonoGame.Extended": "1.1.0",
+    "MonoGame.Extended.Animations": "1.1.0",
+    "MonoGame.Framework.Portable": "3.6.0.1625",
+    "System.Runtime.Serialization.Json": "4.0.0",
+    "System.Runtime.Serialization.Primitives": "4.0.0"
+  },
+  "frameworks": {
+    "dotnet": {
+      "imports": "portable-net452+win81"
+    }
+  }
+}

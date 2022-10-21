@@ -1,29 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.0.31612.314
+VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RogueSquad", "RogueSquad.csproj", "{C9D2FBDB-E5A1-4DF3-B447-3D422433A6AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RogueSquad", "RogueSquad\RogueSquad.csproj", "{92DEC0DE-49F1-4A84-B4B6-6C20AB27B259}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RogueSquadLib", "..\RogueSquadLib\RogueSquadLib.csproj", "{221C11B4-8354-4F9C-83C6-0F0CC69BFC4A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{01C87FEF-D829-4969-9670-F054550BD100}"
-	ProjectSection(SolutionItems) = preProject
-		..\CopyReleaseToPublic.ps1 = ..\CopyReleaseToPublic.ps1
-		..\Readme.md = ..\Readme.md
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpriteConfig", "..\..\Tools\SpriteConfig\SpriteConfig.csproj", "{1029EDF2-B291-4EC8-B397-4FAA161F52AE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpriteBuilder", "..\..\Tools\SpriteBuilder\SpriteBuilder.csproj", "{52C5B106-7302-4251-9E33-07051C0124F5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{ED2996A6-28B3-49C5-940C-EBF1932808AC}"
-	ProjectSection(SolutionItems) = preProject
-		Issues.md = Issues.md
-		C:\Users\Jonathan Morales\OneDrive\Notes\GameDev\RogueSquad.md = C:\Users\Jonathan Morales\OneDrive\Notes\GameDev\RogueSquad.md
-		C:\Users\Jonathan Morales\OneDrive\Notes\GameDev\RogueSquadBrainstorm.md = C:\Users\Jonathan Morales\OneDrive\Notes\GameDev\RogueSquadBrainstorm.md
-		C:\Users\Jonathan Morales\OneDrive\Notes\GameDev\RogueSquadDev.md = C:\Users\Jonathan Morales\OneDrive\Notes\GameDev\RogueSquadDev.md
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RogueSquadLib", "RogueSquadLib\RogueSquadLib.csproj", "{511032F6-81AD-4F19-BE94-F92700639F57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,27 +13,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C9D2FBDB-E5A1-4DF3-B447-3D422433A6AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9D2FBDB-E5A1-4DF3-B447-3D422433A6AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9D2FBDB-E5A1-4DF3-B447-3D422433A6AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9D2FBDB-E5A1-4DF3-B447-3D422433A6AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{221C11B4-8354-4F9C-83C6-0F0CC69BFC4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{221C11B4-8354-4F9C-83C6-0F0CC69BFC4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{221C11B4-8354-4F9C-83C6-0F0CC69BFC4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{221C11B4-8354-4F9C-83C6-0F0CC69BFC4A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1029EDF2-B291-4EC8-B397-4FAA161F52AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1029EDF2-B291-4EC8-B397-4FAA161F52AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1029EDF2-B291-4EC8-B397-4FAA161F52AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1029EDF2-B291-4EC8-B397-4FAA161F52AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{52C5B106-7302-4251-9E33-07051C0124F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{52C5B106-7302-4251-9E33-07051C0124F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{52C5B106-7302-4251-9E33-07051C0124F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{52C5B106-7302-4251-9E33-07051C0124F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92DEC0DE-49F1-4A84-B4B6-6C20AB27B259}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92DEC0DE-49F1-4A84-B4B6-6C20AB27B259}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92DEC0DE-49F1-4A84-B4B6-6C20AB27B259}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92DEC0DE-49F1-4A84-B4B6-6C20AB27B259}.Release|Any CPU.Build.0 = Release|Any CPU
+		{511032F6-81AD-4F19-BE94-F92700639F57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{511032F6-81AD-4F19-BE94-F92700639F57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{511032F6-81AD-4F19-BE94-F92700639F57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{511032F6-81AD-4F19-BE94-F92700639F57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5B896C5E-244C-4652-86F6-761C17F8C377}
+		SolutionGuid = {FB1D46B0-4F68-46CC-A8CB-229DC2D4E4DD}
 	EndGlobalSection
 EndGlobal

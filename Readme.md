@@ -1,6 +1,5 @@
 # Rogue Squad
-This repo is for the indie game RogueSquad being developed on Monogame 3.8 and running on .NET Core 5 (Core 6 as soon as MG supports it), supporting Windows, OSX and Linux.
-At the moment, Rogue Squad is planned to be a 2D, squad-based, tactical rogue-like game.  
+This repo is indie dev on the Rogue Squad engine. At the moment, being used for testing ideas and teaching gamedev concepts.
 
 ## RogueSquad
 The platform specific content 

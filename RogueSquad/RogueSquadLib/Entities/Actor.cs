@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,29 +31,5 @@ namespace RogueSquadLib.Entities
         }
 
     }    
-
-    class MovementComponent
-    {
-        // TODO: Change this to an integer to keep the movecomponent small for cache coherence, requires central 'repo' giving out ints. 
-        public string Id { get; set; }
-        public Vector2 Speed { get; set; }
-        public Rectangle BoundingBox { get; set; }
-        public void UpdateBoundingBox(Rectangle rect)
-        {
-            this.BoundingBox = rect;
-        }
-        public bool Collided { get; set; }
-        public bool ResetCollision() => Collided = false;
-    }
-
-    class DrawComponent
-    { 
-        public Vector2 Scale { get; set; }
-        public Color Tint { get; set; }
-        public Texture2D Texture { get; set; }
-        public int TextureId { get; set; }
-        public Rectangle SrcRect { get; set; } // for rendering _from
-    
-    }
 
 }

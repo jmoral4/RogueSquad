@@ -24,7 +24,7 @@ namespace RogueSquadLib.Core.Screens
         /// Constructor fills in the menu contents.
         /// </summary>
         public MainMenuScreen()
-            : base("Rogue Squad \nBuild: " + VersionInfo.GetVersionString())
+            : base("Rogue Squad Engine \nBuild: " + VersionInfo.GetVersionString())
         {
            //Daniel Birch - The Shape Of Nothing
            
@@ -33,7 +33,7 @@ namespace RogueSquadLib.Core.Screens
             MenuEntry playGameMenuEntry = new MenuEntry("AI Testbed");
             MenuEntry animationTest = new MenuEntry("Sound and Animation Test");
             MenuEntry optionsMenuEntry = new MenuEntry("Options");
-            MenuEntry setpieceEditorMenuEntry = new MenuEntry("Breakout");
+            MenuEntry breakoutMenuEntry = new MenuEntry("Breakout Test");
             MenuEntry npcEditorMenuEntry = new MenuEntry("Future Feature...");
             MenuEntry objectEditorMenuEntry = new MenuEntry("Future Feature...");            
             MenuEntry exitMenuEntry = new MenuEntry("Exit");                        
@@ -44,18 +44,19 @@ namespace RogueSquadLib.Core.Screens
             playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
             animationTest.Selected += AnimationTest_Selected;
             optionsMenuEntry.Selected += OptionsMenuEntrySelected;
-            setpieceEditorMenuEntry.Selected += SetpieceEditorMenuEntrySelected;
+            breakoutMenuEntry.Selected += SetpieceEditorMenuEntrySelected;
              npcEditorMenuEntry.Selected += NpcEditorMenuEntrySelected;
             objectEditorMenuEntry.Selected += ObjectEditorMenuEntrySelected;            
             exitMenuEntry.Selected += OnCancel;
 
             // Add entries to the menu.
-            MenuEntries.Add(playGameMenuEntry);
-            MenuEntries.Add(animationTest);
+            //MenuEntries.Add(playGameMenuEntry);
+            //MenuEntries.Add(animationTest);
+            MenuEntries.Add(breakoutMenuEntry);
             MenuEntries.Add(optionsMenuEntry);
-            MenuEntries.Add(setpieceEditorMenuEntry);
-            MenuEntries.Add(npcEditorMenuEntry);
-            MenuEntries.Add(objectEditorMenuEntry);            
+            
+            //MenuEntries.Add(npcEditorMenuEntry);
+            //MenuEntries.Add(objectEditorMenuEntry);            
             MenuEntries.Add(exitMenuEntry);
         }
 

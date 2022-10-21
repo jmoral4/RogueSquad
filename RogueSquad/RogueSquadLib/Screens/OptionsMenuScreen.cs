@@ -81,10 +81,10 @@ namespace RogueSquadLib.Core.Screens
             back.Selected += OnCancel;
             
             // Add entries to the menu.
-            MenuEntries.Add(ungulateMenuEntry);
-            MenuEntries.Add(languageMenuEntry);
-            MenuEntries.Add(frobnicateMenuEntry);
-            MenuEntries.Add(elfMenuEntry);
+            //MenuEntries.Add(ungulateMenuEntry);
+            //MenuEntries.Add(languageMenuEntry);
+            //MenuEntries.Add(frobnicateMenuEntry);
+            //MenuEntries.Add(elfMenuEntry);
             MenuEntries.Add(cpuMenuEntry);
             MenuEntries.Add(gpuMenuEntry);
             MenuEntries.Add(diskSpaceMenuEntry);

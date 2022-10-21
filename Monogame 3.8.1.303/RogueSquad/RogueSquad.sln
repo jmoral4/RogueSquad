@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RogueSquad", "RogueSquad\RogueSquad.csproj", "{92DEC0DE-49F1-4A84-B4B6-6C20AB27B259}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RogueSquadLib", "RogueSquadLib\RogueSquadLib.csproj", "{511032F6-81AD-4F19-BE94-F92700639F57}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92DEC0DE-49F1-4A84-B4B6-6C20AB27B259}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92DEC0DE-49F1-4A84-B4B6-6C20AB27B259}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92DEC0DE-49F1-4A84-B4B6-6C20AB27B259}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92DEC0DE-49F1-4A84-B4B6-6C20AB27B259}.Release|Any CPU.Build.0 = Release|Any CPU
+		{511032F6-81AD-4F19-BE94-F92700639F57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{511032F6-81AD-4F19-BE94-F92700639F57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{511032F6-81AD-4F19-BE94-F92700639F57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{511032F6-81AD-4F19-BE94-F92700639F57}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB1D46B0-4F68-46CC-A8CB-229DC2D4E4DD}
+	EndGlobalSection
+EndGlobal
